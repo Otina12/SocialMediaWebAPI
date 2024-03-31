@@ -71,12 +71,6 @@ namespace SocialMediaWebApp.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] MemberLoginDto loginDto)
         {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("404", "Uh oh");
-                return BadRequest(ModelState);
-            }
-
             var member = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == loginDto.Username);
 
             if(member is null)
@@ -104,8 +98,8 @@ namespace SocialMediaWebApp.Controllers
         public string GetMyToken() // temporary funtion to help me save time with testing authorization
         {
             return "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9." +
-                "eyJuYW1laWQiOiIzMmNiZmE2OS1iNzNjLTQ3ZDUtYTE0OS0yNmQ0ZjZhMTk2NDMiLCJlbWFpbCI6Imdpb3JnaUBleGFtcGxlLmNvbSIsImdpdmVuX25hbWUiOiJHaW9yZ2kiLCJuYmYiOjE3MTA5MzM1NTIsImV4cCI6MTcxMTUzODM1MiwiaWF0IjoxNzEwOTMzNTUyLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjQ0MzI3IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo0NDMyNy8ifQ." +
-                "Bcb3VaWIBgytxRheIYUWyll8IaKEaAhJ1WuqEDQecVXMWw3GZuLzoiQn4St84UUwUXCplun2r8lLX54SRPSrXQ";
+                "eyJuYW1laWQiOiJkMGNiODNmMS05MTMyLTRmYTYtOWU3Yy1hMDZkOTAzNzY4Y2IiLCJlbWFpbCI6Imdpb3JndW5hQGV4YW1wbGUuY29tIiwiZ2l2ZW5fbmFtZSI6Imdpb3JndW5hIiwibmJmIjoxNzExODgyODMwLCJleHAiOjE3MTI0ODc2MzAsImlhdCI6MTcxMTg4MjgzMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0NDMyNyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDQzMjcvIn0." +
+                "FZvgjR7dJGj2h2jwguiUfHxDu8EkPwRLS47jZY42Xe_y56SkLVh8GcM1N8qQLsJoBI8q9C6A_4NCv5-9fdZm0g";
         }
     }
 }

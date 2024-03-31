@@ -64,11 +64,6 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public IActionResult CreateCommunity([FromBody] CreateCommunityDto communityDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var community = communityDto.MapToCommunity();
             community.CreatorId = _httpContext.HttpContext!.User.GetCurrentUserId();
 

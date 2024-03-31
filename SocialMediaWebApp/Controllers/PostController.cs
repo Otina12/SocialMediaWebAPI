@@ -62,11 +62,6 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromRoute] int communityId, [FromBody] CreatePostDto createPostDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var communityExists = await _communityRepository.CommunityExists(communityId);
 
             if (!communityExists)
@@ -100,11 +95,6 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Edit([FromRoute] int communityId, [FromRoute] int postId, [FromBody] string content) // we only need content so I'll not use DTO
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var post = await _postRepository.GetPostByIdAsync(communityId, postId);
 

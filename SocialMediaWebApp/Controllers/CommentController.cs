@@ -54,11 +54,6 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> AddComment([FromRoute] int communityId, [FromRoute] int postId, [FromBody] CreateCommentDto createCommentDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var postExists = await _postRepository.PostExists(communityId, postId);
 
             if (!postExists)
@@ -90,11 +85,6 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> EditComment([FromRoute] int communityId, [FromRoute] int postId, [FromRoute] int commentId, [FromBody] string content)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var comment = await _commentRepository.GetCommentById(communityId, postId, commentId);
 
             if (comment == null)
@@ -126,11 +116,6 @@ namespace SocialMediaWebApp.Controllers
         public async Task<IActionResult> AddReply([FromRoute] int communityId, [FromRoute] int postId,
             [FromRoute] int commentId, [FromBody] CreateCommentDto createCommentDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var commentExists = await _commentRepository.CommentExists(communityId, postId, commentId);
 
             if (!commentExists)

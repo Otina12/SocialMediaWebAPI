@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SocialMediaWebApp.Tests.ControllerTest
 {
-    public class PostControllerTest
+    public class PostControllerTests
     {
         private readonly IPostRepository _postRepository;
         private readonly ICommentRepository _commentRepository;
@@ -23,7 +23,7 @@ namespace SocialMediaWebApp.Tests.ControllerTest
         private readonly ILikeRepository _likeRepository;
         private readonly IHttpContextAccessor _httpContext;
 
-        public PostControllerTest()
+        public PostControllerTests()
         {
             _postRepository = A.Fake<IPostRepository>();
             _commentRepository = A.Fake<ICommentRepository>();
@@ -33,16 +33,16 @@ namespace SocialMediaWebApp.Tests.ControllerTest
         }
 
         [Fact]
-        public async void PostController_GetPostById_ReturnOk()
+        public void PostController_GetPostById_ReturnOk()
         {
+            int communityId = 1, postId = 1;
             var post = A.Fake<Post>();
             var postDto = A.Fake<PostDto>();
             var controller = new PostController(_postRepository, _commentRepository, _communityRepository, _likeRepository, _httpContext);
-
             A.CallTo(() => PostMapper.MapToPostDto(post)).Returns(postDto);
 
-            var result = controller.GetPostById(0, 1);
-
+            A.CallTo(() => _postRepository.GetPostByIdAsync(communityId, postId)).Returns(Task.FromResult(post));
+            var result = post.MapToPostDto();
             result.Should().BeOfType(typeof(OkObjectResult));
         }
     }

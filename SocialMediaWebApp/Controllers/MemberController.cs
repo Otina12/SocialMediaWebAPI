@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaWebApp.DTOs;
 using SocialMediaWebApp.Extensions;
 using SocialMediaWebApp.Interfaces;
 using SocialMediaWebApp.Mappers;
-using SocialMediaWebApp.Models;
-using SocialMediaWebApp.Repositories;
-using System.Net.Http;
+
 
 namespace SocialMediaWebApp.Controllers
 {
@@ -134,11 +131,6 @@ namespace SocialMediaWebApp.Controllers
         [Route("Like/{communityId}/{postId}/{commentId}")]
         public async Task<IActionResult> LikeComment([FromRoute] int commentId, [FromRoute] int postId, [FromRoute] int communityId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var postExists = await _commentRepository.CommentExists(communityId, postId, commentId);
 
