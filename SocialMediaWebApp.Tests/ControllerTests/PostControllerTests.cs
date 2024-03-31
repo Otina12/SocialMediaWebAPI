@@ -22,6 +22,7 @@ namespace SocialMediaWebApp.Tests.ControllerTest
         private readonly ICommunityRepository _communityRepository;
         private readonly ILikeRepository _likeRepository;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IStaticWrapper _staticWrapper;
 
         public PostControllerTests()
         {
@@ -30,20 +31,23 @@ namespace SocialMediaWebApp.Tests.ControllerTest
             _communityRepository = A.Fake<ICommunityRepository>();
             _likeRepository = A.Fake<ILikeRepository>();
             _httpContext = A.Fake<IHttpContextAccessor>();
+            _staticWrapper = A.Fake<IStaticWrapper>();
         }
 
         [Fact]
-        public void PostController_GetPostById_ReturnOk()
+        public async void GetPostById_ReturnOk_WhenPostFound()
         {
             int communityId = 1, postId = 1;
             var post = A.Fake<Post>();
             var postDto = A.Fake<PostDto>();
             var controller = new PostController(_postRepository, _commentRepository, _communityRepository, _likeRepository, _httpContext);
-            A.CallTo(() => PostMapper.MapToPostDto(post)).Returns(postDto);
+            
+            A.CallTo(() => _postRepository.GetPostByIdAsync(communityId, postId))!.Returns(Task.FromResult(post));
+            A.CallTo(() => _staticWrapper.ToPostDto(post)).Returns(postDto);
 
-            A.CallTo(() => _postRepository.GetPostByIdAsync(communityId, postId)).Returns(Task.FromResult(post));
-            var result = post.MapToPostDto();
-            result.Should().BeOfType(typeof(OkObjectResult));
+            var result = await controller.GetPostById(communityId, postId);
+
+            result.Should().BeOfType<ActionResult<PostDto>>();
         }
     }
 }
