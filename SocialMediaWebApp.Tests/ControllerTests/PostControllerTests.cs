@@ -47,6 +47,7 @@ namespace SocialMediaWebApp.Tests.ControllerTest
 
             var result = await controller.GetPostById(communityId, postId);
 
+            result.Should().NotBeNull();
             result.Should().BeOfType<ActionResult<PostDto>>();
         }
     }

@@ -50,8 +50,7 @@
               "RelativeToolTip": "SocialMediaWebApp\\Services\\StaticWrapperService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-31T11:34:11.438Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-31T11:34:11.438Z"
             },
             {
               "$type": "Document",
@@ -63,8 +62,7 @@
               "RelativeToolTip": "SocialMediaWebApp\\Interfaces\\IStaticWrapper.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAuwAYAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-31T11:33:32.312Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-31T11:33:32.312Z"
             },
             {
               "$type": "Document",
@@ -87,7 +85,7 @@
               "RelativeDocumentMoniker": "SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
               "ToolTip": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
               "RelativeToolTip": "SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
-              "ViewState": "AQIAACEAAAAAAAAAAAAEwDEAAAA+AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-27T18:18:01.724Z",
               "EditorCaption": ""
