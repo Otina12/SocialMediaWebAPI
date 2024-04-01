@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +16,15 @@ namespace SocialMediaWebApp.Controllers
         private readonly UserManager<Member> _userManager;
         private readonly SignInManager<Member> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly IWelcomeService _welcomeService;
 
-        public AuthController(UserManager<Member> userManager, SignInManager<Member> signInManager, ITokenService tokenService)
+        public AuthController(UserManager<Member> userManager, SignInManager<Member> signInManager,
+            ITokenService tokenService, IWelcomeService welcomeService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _welcomeService = welcomeService;
         }
 
         [HttpPost("Register")]
@@ -59,6 +63,9 @@ namespace SocialMediaWebApp.Controllers
                     Email = newMember.Email,
                     Token = _tokenService.CreateToken(newMember)
                 };
+
+                BackgroundJob.Enqueue(() => _welcomeService.WelcomeMessage(registerDto.Username));
+
                 return Ok(newUserDto);
             }
             catch(Exception ex)
