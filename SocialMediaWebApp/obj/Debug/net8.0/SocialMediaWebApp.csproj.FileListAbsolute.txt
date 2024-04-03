@@ -168,3 +168,14 @@ C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\tr-TR\Hangfire.Core.resources.dll
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\zh-TW\Hangfire.Core.resources.dll
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\zh\Hangfire.Core.resources.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.AspNetCore.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Extensions.Hosting.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Extensions.Logging.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Formatting.Compact.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Settings.Configuration.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Sinks.Console.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Sinks.Debug.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Sinks.File.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Sinks.MSSqlServer.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Sinks.PeriodicBatching.dll

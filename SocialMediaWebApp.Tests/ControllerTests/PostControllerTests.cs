@@ -41,14 +41,27 @@ namespace SocialMediaWebApp.Tests.ControllerTest
             var post = A.Fake<Post>();
             var postDto = A.Fake<PostDto>();
             var controller = new PostController(_postRepository, _commentRepository, _communityRepository, _likeRepository, _httpContext);
-            
             A.CallTo(() => _postRepository.GetPostByIdAsync(communityId, postId))!.Returns(Task.FromResult(post));
             A.CallTo(() => _staticWrapper.ToPostDto(post)).Returns(postDto);
 
-            var result = await controller.GetPostById(communityId, postId);
+            var result = (OkObjectResult) await controller.GetPostById(communityId, postId);
 
             result.Should().NotBeNull();
-            result.Should().BeOfType<ActionResult<PostDto>>();
+            result.Should().BeOfType<OkObjectResult>();
+        }
+
+        [Fact]
+        public async void GetPostById_ReturnNotFound_WhenPostNotFound()
+        {
+            int communityId = 1, postId = 1;
+            Post post = null;
+            var postDto = A.Fake<PostDto>();
+            var controller = new PostController(_postRepository, _commentRepository, _communityRepository, _likeRepository, _httpContext);
+            A.CallTo(() => _postRepository.GetPostByIdAsync(communityId, postId))!.Returns(Task.FromResult(post));
+
+            var result = (NotFoundResult) await controller.GetPostById(communityId, postId);
+
+            result.Should().BeOfType<NotFoundResult>();
         }
     }
 }

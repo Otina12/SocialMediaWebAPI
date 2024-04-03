@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SocialMediaWebApp.DTOs;
 using SocialMediaWebApp.Extensions;
 using SocialMediaWebApp.Interfaces;
@@ -33,16 +34,18 @@ namespace SocialMediaWebApp.Controllers
 
 
         [HttpGet("{communityId}/{postId}")]
-        public async Task<ActionResult<PostDto>> GetPostById([FromRoute] int communityId, [FromRoute] int postId)
+        public async Task<IActionResult> GetPostById([FromRoute] int communityId, [FromRoute] int postId)
         {
             var post = await _postRepository.GetPostByIdAsync(communityId, postId);
 
             if (post == null)
             {
+                Log.Error("Post [CommunityId: {communityId}, PostId: {postId}] was not found", communityId, postId);
                 return NotFound();
             }
 
             var postDto = post.MapToPostDto();
+            Log.Information("Returned post {@post}", post);
 
             return Ok(postDto);
         }

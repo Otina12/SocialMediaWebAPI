@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|solutionrelative:socialmediawebapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|solutionrelative:socialmediawebapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp\\controllers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|solutionrelative:socialmediawebapp\\controllers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{91A9C33E-340A-45FB-A449-F8B4722FC97F}|SocialMediaWebApp.Tests\\SocialMediaWebApp.Tests.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp.tests\\controllertests\\postcontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{91A9C33E-340A-45FB-A449-F8B4722FC97F}|SocialMediaWebApp.Tests\\SocialMediaWebApp.Tests.csproj|solutionrelative:socialmediawebapp.tests\\controllertests\\postcontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp\\services\\welcomeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|solutionrelative:socialmediawebapp\\services\\welcomeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -15,20 +31,8 @@
       "RelativeMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|solutionrelative:socialmediawebapp\\interfaces\\istaticwrapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|solutionrelative:socialmediawebapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|solutionrelative:socialmediawebapp\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{91A9C33E-340A-45FB-A449-F8B4722FC97F}|SocialMediaWebApp.Tests\\SocialMediaWebApp.Tests.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp.tests\\controllertests\\postcontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{91A9C33E-340A-45FB-A449-F8B4722FC97F}|SocialMediaWebApp.Tests\\SocialMediaWebApp.Tests.csproj|solutionrelative:socialmediawebapp.tests\\controllertests\\postcontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|c:\\users\\giorgi\\source\\repos\\socialmediawebapp\\socialmediawebapp\\controllers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3E4481D3-401A-44A9-9BA4-4B7F727FD6F3}|SocialMediaWebApp\\SocialMediaWebApp.csproj|solutionrelative:socialmediawebapp\\controllers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -37,8 +41,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 183,
-          "SelectedChildIndex": 3,
+          "DockedWidth": 177,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,7 +58,59 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Program.cs",
+              "RelativeDocumentMoniker": "SocialMediaWebApp\\Program.cs",
+              "ToolTip": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Program.cs",
+              "RelativeToolTip": "SocialMediaWebApp\\Program.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAApwAgAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-01T12:59:04.309Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\appsettings.json",
+              "RelativeDocumentMoniker": "SocialMediaWebApp\\appsettings.json",
+              "ToolTip": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\appsettings.json",
+              "RelativeToolTip": "SocialMediaWebApp\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAcwAcAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-04-03T08:36:10.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PostController.cs",
+              "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Controllers\\PostController.cs",
+              "RelativeDocumentMoniker": "SocialMediaWebApp\\Controllers\\PostController.cs",
+              "ToolTip": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Controllers\\PostController.cs",
+              "RelativeToolTip": "SocialMediaWebApp\\Controllers\\PostController.cs",
+              "ViewState": "AQIAACAAAAAAAAAAAAAQwC8AAAA7AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-01T13:45:08.032Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PostControllerTests.cs",
+              "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
+              "RelativeDocumentMoniker": "SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
+              "ToolTip": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
+              "RelativeToolTip": "SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
+              "ViewState": "AQIAACgAAAAAAAAAAAAQwDEAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-27T18:18:01.724Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "WelcomeService.cs",
               "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Services\\WelcomeService.cs",
               "RelativeDocumentMoniker": "SocialMediaWebApp\\Services\\WelcomeService.cs",
@@ -67,7 +123,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "IWelcomeService.cs",
               "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Interfaces\\IWelcomeService.cs",
               "RelativeDocumentMoniker": "SocialMediaWebApp\\Interfaces\\IWelcomeService.cs",
@@ -80,7 +136,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "SocialMediaWebApp\\Controllers\\AuthController.cs",
@@ -93,20 +149,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Program.cs",
-              "RelativeDocumentMoniker": "SocialMediaWebApp\\Program.cs",
-              "ToolTip": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Program.cs",
-              "RelativeToolTip": "SocialMediaWebApp\\Program.cs",
-              "ViewState": "AQIAABsAAAAAAAAAAAASwBsAAAA2AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-01T12:59:04.309Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "IStaticWrapper.cs",
               "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Interfaces\\IStaticWrapper.cs",
               "RelativeDocumentMoniker": "SocialMediaWebApp\\Interfaces\\IStaticWrapper.cs",
@@ -115,32 +158,6 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAuwAYAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-31T11:33:32.312Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "PostController.cs",
-              "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Controllers\\PostController.cs",
-              "RelativeDocumentMoniker": "SocialMediaWebApp\\Controllers\\PostController.cs",
-              "ToolTip": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp\\Controllers\\PostController.cs",
-              "RelativeToolTip": "SocialMediaWebApp\\Controllers\\PostController.cs",
-              "ViewState": "AQIAAB8AAAAAAAAAAAAuwCUAAAA6AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-27T17:04:30.733Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "PostControllerTests.cs",
-              "DocumentMoniker": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
-              "RelativeDocumentMoniker": "SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
-              "ToolTip": "C:\\Users\\Giorgi\\source\\repos\\SocialMediaWebApp\\SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
-              "RelativeToolTip": "SocialMediaWebApp.Tests\\ControllerTests\\PostControllerTests.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAjAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-27T18:18:01.724Z",
               "EditorCaption": ""
             }
           ]
