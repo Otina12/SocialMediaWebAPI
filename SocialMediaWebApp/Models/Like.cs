@@ -7,8 +7,8 @@ namespace SocialMediaWebApp.Models
     [PrimaryKey(nameof(PostId), nameof(CommunityId), nameof(MemberId))]
     public class Like
     {
-        public int PostId { get; set; }
-        public int CommunityId { get; set; }
+        public Guid PostId { get; set; }
+        public Guid CommunityId { get; set; }
         public string MemberId { get; set; }
         [ForeignKey("PostId, CommunityId")]
         public Post Post { get; set; }

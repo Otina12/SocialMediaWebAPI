@@ -7,9 +7,9 @@ namespace SocialMediaWebApp.Models
     public class LikeComment
     {
 
-        public int CommentId { get; set; }
-        public int PostId { get; set; }
-        public int CommunityId { get; set; }
+        public Guid CommentId { get; set; }
+        public Guid PostId { get; set; }
+        public Guid CommunityId { get; set; }
         public string MemberId { get; set; }
         [ForeignKey("CommentId, PostId, CommunityId")]
         public Comment Comment { get; set; }

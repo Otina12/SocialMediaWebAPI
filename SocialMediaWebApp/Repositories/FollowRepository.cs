@@ -20,19 +20,19 @@ namespace SocialMediaWebApp.Repositories
             return followings;
         }
 
-        public async Task<List<Following>> GetFollowingsOfCommunity(int communityId)
+        public async Task<List<Following>> GetFollowingsOfCommunity(Guid communityId)
         {
             var followings = await _context.Followings.Where(f => f.CommunityId == communityId).ToListAsync();
             return followings;
         }
 
-        public async Task<Following?> GetFollowingById(string memberId, int communityId)
+        public async Task<Following?> GetFollowingById(string memberId, Guid communityId)
         {
             var following = await _context.Followings.FirstOrDefaultAsync(f => f.FollowerId == memberId && f.CommunityId == communityId);
             return following;
         }
 
-        public bool Follow(string memberId, int communityId)
+        public bool Follow(string memberId, Guid communityId)
         {
             var followingExists = _context.Followings.AsNoTracking().Any(f => f.FollowerId == memberId && f.CommunityId == communityId);
             if(followingExists)

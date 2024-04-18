@@ -118,8 +118,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseHangfireDashboard();
-app.MapHangfireDashboard("/hangfire");
-RecurringJob.AddOrUpdate(() => Console.WriteLine("Testing if works. [edit] It did :D"), Cron.Minutely);
+//app.UseHangfireDashboard();
+//app.MapHangfireDashboard("/hangfire");
+//RecurringJob.AddOrUpdate(() => Console.WriteLine("Testing if works. [edit] It did :D"), Cron.Minutely);
 
 app.Run();

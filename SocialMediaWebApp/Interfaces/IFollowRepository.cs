@@ -5,9 +5,9 @@ namespace SocialMediaWebApp.Interfaces
     public interface IFollowRepository
     {
         Task<List<Following>> GetFollowingsOfMember(string memberId);
-        Task<List<Following>> GetFollowingsOfCommunity(int communityId);
-        Task<Following?> GetFollowingById(string memberId, int communityId);
-        bool Follow(string memberId, int communityId);
+        Task<List<Following>> GetFollowingsOfCommunity(Guid communityId);
+        Task<Following?> GetFollowingById(string memberId, Guid communityId);
+        bool Follow(string memberId, Guid communityId);
         bool Unfollow(Following following);
         bool Save();
     }

@@ -37,7 +37,7 @@ namespace SocialMediaWebApp.Tests.ControllerTest
         [Fact]
         public async void GetPostById_ReturnOk_WhenPostFound()
         {
-            int communityId = 1, postId = 1;
+            Guid communityId = Guid.NewGuid(), postId = Guid.NewGuid();
             var post = A.Fake<Post>();
             var postDto = A.Fake<PostDto>();
             var controller = new PostController(_postRepository, _commentRepository, _communityRepository, _likeRepository, _httpContext);
@@ -53,7 +53,7 @@ namespace SocialMediaWebApp.Tests.ControllerTest
         [Fact]
         public async void GetPostById_ReturnNotFound_WhenPostNotFound()
         {
-            int communityId = 1, postId = 1;
+            Guid communityId = Guid.NewGuid(), postId = Guid.NewGuid();
             Post post = null;
             var postDto = A.Fake<PostDto>();
             var controller = new PostController(_postRepository, _commentRepository, _communityRepository, _likeRepository, _httpContext);

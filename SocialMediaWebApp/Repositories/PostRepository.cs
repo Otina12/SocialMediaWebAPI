@@ -26,33 +26,19 @@ namespace SocialMediaWebApp.Repositories
             return posts;
         }
 
-        public async Task<Post?> GetPostByIdAsync(int communityId, int postId)
+        public async Task<Post?> GetPostByIdAsync(Guid communityId, Guid postId)
         {
             var post = await _context.Posts.FirstOrDefaultAsync(p => p.CommunityId == communityId && p.Id == postId);
             return post;
         }
 
-        public int GetFirstAvailableId(int communityID)
-        {
-            var posts = _context.Posts.AsNoTracking().Where(c => c.CommunityId == communityID).ToList();
-            if(posts.Count == 0)
-            {
-                return 1;
-            }
-            else
-            {
-                var lastId = posts.Select(p => p.Id).Last();
-                return lastId + 1;
-            }
-        }
-
-        public async Task<bool> PostExists(int communityId, int postId)
+        public async Task<bool> PostExists(Guid communityId, Guid postId)
         {
             var post = await _context.Posts.AsNoTracking()
                 .FirstOrDefaultAsync(c => c.CommunityId == communityId && c.Id == postId);
             return post != null;
         }
-        
+
         public bool Create(Post post)
         {
             _context.Add(post);

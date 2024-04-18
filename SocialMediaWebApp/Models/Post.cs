@@ -7,10 +7,10 @@ namespace SocialMediaWebApp.Models
     [PrimaryKey(nameof(Id), nameof(CommunityId))]
     public class Post
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [ForeignKey(nameof(Community))]
         [Required]
-        public int CommunityId { get; set; }
+        public Guid CommunityId { get; set; }
         [ForeignKey(nameof(Member))]
         [Required]
         public string MemberId { get; set; }

@@ -49,7 +49,7 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPost("Follow/{communityId}")]
         [Authorize]
-        public async Task<IActionResult> FollowCommunity([FromRoute] int communityId)
+        public async Task<IActionResult> FollowCommunity([FromRoute] Guid communityId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var communityExists = await _communityRepository.CommunityExists(communityId);
@@ -73,7 +73,7 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPost("Unfollow/{communityId}")]
         [Authorize]
-        public async Task<IActionResult> UnFollowCommunity([FromRoute] int communityId)
+        public async Task<IActionResult> UnFollowCommunity([FromRoute] Guid communityId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var communityExists = await _communityRepository.CommunityExists(communityId);
@@ -104,7 +104,7 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPost("{memberId}/Like/{communityId}/{postId}")]
         [Authorize]
-        public async Task<IActionResult> LikePost([FromRoute] string memberId, [FromRoute] int postId, [FromRoute] int communityId)
+        public async Task<IActionResult> LikePost([FromRoute] string memberId, [FromRoute] Guid postId, [FromRoute] Guid communityId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var postExists = await _postRepository.PostExists(communityId, postId);
@@ -129,7 +129,7 @@ namespace SocialMediaWebApp.Controllers
         [HttpPost]
         [Authorize]
         [Route("Like/{communityId}/{postId}/{commentId}")]
-        public async Task<IActionResult> LikeComment([FromRoute] int commentId, [FromRoute] int postId, [FromRoute] int communityId)
+        public async Task<IActionResult> LikeComment([FromRoute] Guid commentId, [FromRoute] Guid postId, [FromRoute] Guid communityId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var postExists = await _commentRepository.CommentExists(communityId, postId, commentId);

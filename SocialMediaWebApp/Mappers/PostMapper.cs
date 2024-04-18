@@ -26,8 +26,8 @@ namespace SocialMediaWebApp.Mappers
         {
             return new Post
             {
-                Id = 0,
-                CommunityId = 0,
+                Id = Guid.Empty,
+                CommunityId = Guid.Empty,
                 Content = postDto.Content,
                 PostTime = DateTime.Now,
                 IsEdited = false,

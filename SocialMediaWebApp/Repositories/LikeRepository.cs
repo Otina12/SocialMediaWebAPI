@@ -14,7 +14,7 @@ namespace SocialMediaWebApp.Repositories
             _context = context;
         }
 
-        public bool LikePost(string memberID, int communityId, int postId)
+        public bool LikePost(string memberID, Guid communityId, Guid postId)
         {
             var like = new Like
             {
@@ -27,7 +27,7 @@ namespace SocialMediaWebApp.Repositories
             return Save();
         }
 
-        public async Task<bool> RemoveAllLikedOfPost(int communityId, int postId)
+        public async Task<bool> RemoveAllLikedOfPost(Guid communityId, Guid postId)
         {
             var likeds = await _context.Likes.Where(l => l.CommunityId == communityId && l.PostId == postId).ToListAsync();
             foreach (var like in likeds)
@@ -37,7 +37,7 @@ namespace SocialMediaWebApp.Repositories
             return Save();
         }
 
-        public bool LikeComment(string memberID, int communityId, int postId, int commentId)
+        public bool LikeComment(string memberID, Guid communityId, Guid postId, Guid commentId)
         {
             var like = new LikeComment
             {
@@ -51,7 +51,7 @@ namespace SocialMediaWebApp.Repositories
             return Save();
         }
 
-        public Task<bool> RemoveAllLikedOfComment(int communityId, int postId, int commentId)
+        public Task<bool> RemoveAllLikedOfComment(Guid communityId, Guid postId, Guid commentId)
         {
             throw new NotImplementedException();
         }

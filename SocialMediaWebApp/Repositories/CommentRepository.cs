@@ -15,13 +15,13 @@ namespace SocialMediaWebApp.Repositories
             _context = context;
         }
 
-        public async Task<List<Comment>> GetAllCommentsOfPost(int communityId, int postId)
+        public async Task<List<Comment>> GetAllCommentsOfPost(Guid communityId, Guid postId)
         {
             var comments = await _context.Comments.Where(c => c.PostId == postId && c.CommunityId == communityId).ToListAsync();
             return comments;
         }
 
-        public async Task<Comment?> GetCommentById(int communityId, int postId, int commentId)
+        public async Task<Comment?> GetCommentById(Guid communityId, Guid postId, Guid commentId)
         {
             var comment = await _context.Comments
                 .FirstOrDefaultAsync(c => c.Id == commentId && c.PostId == postId && c.CommunityId == communityId);
@@ -34,25 +34,13 @@ namespace SocialMediaWebApp.Repositories
             return comments;
         }
 
-        public async Task<List<Comment>> GetAllRepliesOfAComment(int communityId, int postId, int commentId)
+        public async Task<List<Comment>> GetAllRepliesOfAComment(Guid communityId, Guid postId, Guid commentId)
         {
             var replies = await _context.Comments.Where(c => c.IsReplyToId == commentId && c.PostId == postId && c.CommunityId == communityId).ToListAsync();
             return replies;
         }
 
-        public int GetFirstAvailableId(int communityId, int postId)
-        {
-            var comments = _context.Comments.AsNoTracking()
-                .Where(c => c.CommunityId == communityId && c.PostId == postId).ToList();
-            if(comments.Count == 0)
-            {
-                return 1;
-            }
-            int lastId = comments.Last().Id;
-            return lastId + 1;
-        }
-
-        public async Task<bool> CommentExists(int communityId, int postId, int commentId)
+        public async Task<bool> CommentExists(Guid communityId, Guid postId, Guid commentId)
         {
             var comment = await _context.Comments
                 .FirstOrDefaultAsync(c => c.Id == commentId && c.CommunityId == communityId && c.PostId == postId);

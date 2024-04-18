@@ -25,7 +25,7 @@ namespace SocialMediaWebApp.Controllers
         }
 
         [HttpGet("{communityId}/{postId}/{commentId}")]
-        public async Task<ActionResult<List<CommentDto>>> GetCommentOfPost([FromRoute] int communityId, [FromRoute] int postId, [FromRoute] int commentId)
+        public async Task<ActionResult<List<CommentDto>>> GetCommentOfPost([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromRoute] Guid commentId)
         {
             var comment = await _commentRepository.GetCommentById(communityId, postId, commentId);
 
@@ -41,7 +41,7 @@ namespace SocialMediaWebApp.Controllers
 
 
         [HttpGet("{communityId}/{postId}/{commentId}/Replies")]
-        public async Task<ActionResult<List<CommentDto>>> GetRepliesOfComment([FromRoute] int communityId, [FromRoute] int postId, [FromRoute] int commentId)
+        public async Task<ActionResult<List<CommentDto>>> GetRepliesOfComment([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromRoute] Guid commentId)
         {
             var comments = await _commentRepository.GetAllRepliesOfAComment(communityId, postId, commentId);
             var commentDtos = comments.Select(c => c.MapToCommentDto());
@@ -52,7 +52,7 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPost("{communityId}/{postId}/Write")]
         [Authorize]
-        public async Task<IActionResult> AddComment([FromRoute] int communityId, [FromRoute] int postId, [FromBody] CreateCommentDto createCommentDto)
+        public async Task<IActionResult> AddComment([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromBody] CreateCommentDto createCommentDto)
         {
             var postExists = await _postRepository.PostExists(communityId, postId);
 
@@ -64,7 +64,7 @@ namespace SocialMediaWebApp.Controllers
 
             var comment = createCommentDto.MapToComment();
 
-            comment.Id = _commentRepository.GetFirstAvailableId(communityId, postId);
+            comment.Id = Guid.NewGuid();
             comment.PostId = postId;
             comment.CommunityId = communityId;
             comment.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
@@ -83,7 +83,7 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPatch("{communityId}/{postId}/{commentId}/Edit")]
         [Authorize]
-        public async Task<IActionResult> EditComment([FromRoute] int communityId, [FromRoute] int postId, [FromRoute] int commentId, [FromBody] string content)
+        public async Task<IActionResult> EditComment([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromRoute] Guid commentId, [FromBody] string content)
         {
             var comment = await _commentRepository.GetCommentById(communityId, postId, commentId);
 
@@ -113,8 +113,8 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPost("{communityId}/{postId}/{commentId}/Replies/Add")]
         [Authorize]
-        public async Task<IActionResult> AddReply([FromRoute] int communityId, [FromRoute] int postId,
-            [FromRoute] int commentId, [FromBody] CreateCommentDto createCommentDto)
+        public async Task<IActionResult> AddReply([FromRoute] Guid communityId, [FromRoute] Guid postId,
+            [FromRoute] Guid commentId, [FromBody] CreateCommentDto createCommentDto)
         {
             var commentExists = await _commentRepository.CommentExists(communityId, postId, commentId);
 
@@ -126,7 +126,7 @@ namespace SocialMediaWebApp.Controllers
 
             var comment = createCommentDto.MapToComment();
 
-            comment.Id = _commentRepository.GetFirstAvailableId(communityId, postId);
+            comment.Id = Guid.NewGuid();
             comment.PostId = postId;
             comment.CommunityId = communityId;
             comment.IsReply = true;
@@ -148,7 +148,7 @@ namespace SocialMediaWebApp.Controllers
         [HttpDelete]
         [Authorize]
         [Route("Delete/{communityId}/{postId}/{commentId}")]
-        public async Task<IActionResult> DeleteComment([FromRoute] int communityId, [FromRoute] int postId, [FromRoute] int commentId)
+        public async Task<IActionResult> DeleteComment([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromRoute] Guid commentId)
         {
             var comment = await _commentRepository.GetCommentById(communityId, postId, commentId);
 

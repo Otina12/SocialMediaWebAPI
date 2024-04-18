@@ -5,12 +5,11 @@ namespace SocialMediaWebApp.Interfaces
 {
     public interface ICommentRepository
     {
-        Task<List<Comment>> GetAllCommentsOfPost(int communityId, int postId);
-        Task<Comment?> GetCommentById(int communityId, int postId, int commentId);
+        Task<List<Comment>> GetAllCommentsOfPost(Guid communityId, Guid postId);
+        Task<Comment?> GetCommentById(Guid communityId, Guid postId, Guid commentId);
         Task<List<Comment>> GetAllCommentsOfMember(string memberId);
-        Task<List<Comment>> GetAllRepliesOfAComment(int communityId, int postId, int commentId);
-        int GetFirstAvailableId(int communityId, int postId);
-        Task<bool> CommentExists(int communityId, int postId, int commentId);
+        Task<List<Comment>> GetAllRepliesOfAComment(Guid communityId, Guid postId, Guid commentId);
+        Task<bool> CommentExists(Guid communityId, Guid postId, Guid commentId);
         bool Create(Comment comment);
         bool Update(Comment comment);
         bool Delete(Comment comment);

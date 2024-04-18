@@ -12,8 +12,8 @@ using SocialMediaWebApp.Data;
 namespace SocialMediaWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240317105802_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20240418130358_IdToGuid")]
+    partial class IdToGuid
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,20 @@ namespace SocialMediaWebApp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "8e223009-ee4c-4c37-9f4c-dbb9dca837aa",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "5df8a2b9-548c-404a-a973-e5ecf6c41fbe",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -160,14 +174,14 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.Comment", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -185,8 +199,8 @@ namespace SocialMediaWebApp.Migrations
                     b.Property<bool>("IsReply")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IsReplyToId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("IsReplyToId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
@@ -206,11 +220,9 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.Community", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatorId")
                         .IsRequired()
@@ -242,8 +254,8 @@ namespace SocialMediaWebApp.Migrations
                     b.Property<string>("FollowerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FollowerId", "CommunityId");
 
@@ -254,11 +266,11 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.Like", b =>
                 {
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(450)");
@@ -275,14 +287,14 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.LikeComment", b =>
                 {
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(450)");
@@ -299,17 +311,15 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.MediaObject", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -401,11 +411,11 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.Post", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CommentCount")
                         .HasColumnType("int");

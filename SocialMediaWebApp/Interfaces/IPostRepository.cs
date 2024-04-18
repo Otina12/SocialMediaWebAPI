@@ -7,9 +7,8 @@ namespace SocialMediaWebApp.Interfaces
     {
         Task<List<Post>> GetAllPostsAsync();
         Task<List<Post>?> GetAllPostsOfMemberAsync(string memberId);
-        Task<Post?> GetPostByIdAsync(int CommunityId, int PostId);
-        int GetFirstAvailableId(int communityID); // this will get the first available Id for creating the post
-        Task<bool> PostExists(int communityId, int postId);
+        Task<Post?> GetPostByIdAsync(Guid CommunityId, Guid PostId);
+        Task<bool> PostExists(Guid CommunityId, Guid PostId);
         bool Create(Post post);
         bool Update(Post post);
         bool Delete(Post post);

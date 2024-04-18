@@ -25,14 +25,14 @@ namespace SocialMediaWebApp.Mappers
         {
             return new Comment
             {
-                Id = 0,
-                PostId = 0,
-                CommunityId = 0,
+                Id = Guid.Empty,
+                PostId = Guid.Empty,
+                CommunityId = Guid.Empty,
                 Content = commentDto.Content,
                 CreateTime = DateTime.Now,
                 IsEdited = false,
                 LikeCount = 0,
-                IsReplyToId = 0
+                IsReplyToId = Guid.Empty
             };
         }
     }

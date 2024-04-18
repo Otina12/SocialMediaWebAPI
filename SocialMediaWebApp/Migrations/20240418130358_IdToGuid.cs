@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SocialMediaWebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDatabase : Migration
+    public partial class IdToGuid : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -164,8 +166,7 @@ namespace SocialMediaWebApp.Migrations
                 name: "Communities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PfpUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -188,7 +189,7 @@ namespace SocialMediaWebApp.Migrations
                 columns: table => new
                 {
                     FollowerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CommunityId = table.Column<int>(type: "int", nullable: false)
+                    CommunityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -211,8 +212,8 @@ namespace SocialMediaWebApp.Migrations
                 name: "Posts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CommunityId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommunityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PostTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -242,9 +243,9 @@ namespace SocialMediaWebApp.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommunityId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommunityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsReply = table.Column<bool>(type: "bit", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -252,7 +253,7 @@ namespace SocialMediaWebApp.Migrations
                     IsEdited = table.Column<bool>(type: "bit", nullable: false),
                     EditTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LikeCount = table.Column<int>(type: "int", nullable: false),
-                    IsReplyToId = table.Column<int>(type: "int", nullable: false)
+                    IsReplyToId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,7 +263,7 @@ namespace SocialMediaWebApp.Migrations
                         column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Posts_PostId_CommunityId",
                         columns: x => new { x.PostId, x.CommunityId },
@@ -275,8 +276,8 @@ namespace SocialMediaWebApp.Migrations
                 name: "Likes",
                 columns: table => new
                 {
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommunityId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommunityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -288,7 +289,7 @@ namespace SocialMediaWebApp.Migrations
                         column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Likes_Posts_PostId_CommunityId",
                         columns: x => new { x.PostId, x.CommunityId },
@@ -301,11 +302,10 @@ namespace SocialMediaWebApp.Migrations
                 name: "MediaObjects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommunityId = table.Column<int>(type: "int", nullable: false)
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommunityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -322,9 +322,9 @@ namespace SocialMediaWebApp.Migrations
                 name: "LikeComments",
                 columns: table => new
                 {
-                    CommentId = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommunityId = table.Column<int>(type: "int", nullable: false),
+                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommunityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -342,7 +342,16 @@ namespace SocialMediaWebApp.Migrations
                         column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "5df8a2b9-548c-404a-a973-e5ecf6c41fbe", null, "User", "USER" },
+                    { "8e223009-ee4c-4c37-9f4c-dbb9dca837aa", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

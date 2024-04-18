@@ -15,13 +15,13 @@ namespace SocialMediaWebApp.Repositories
             _context = context;
         }
 
-        public async Task<Community?> GetCommunityById(int communityId)
+        public async Task<Community?> GetCommunityById(Guid communityId)
         {
             var community = await _context.Communities.FirstOrDefaultAsync(c => c.Id == communityId);
             return community;
         }
 
-        public async Task<List<Post>> GetAllPostsOfCommunity(int communityId, QueryObject query)
+        public async Task<List<Post>> GetAllPostsOfCommunity(Guid communityId, QueryObject query)
         {
             var posts = _context.Posts.Where(p => p.CommunityId == communityId).AsQueryable();
 
@@ -39,13 +39,13 @@ namespace SocialMediaWebApp.Repositories
             return finalPosts;
         }
 
-        public async Task<List<Post>> GetAllPostsOfCommunity(int communityId)
+        public async Task<List<Post>> GetAllPostsOfCommunity(Guid communityId)
         {
             var posts = await _context.Posts.Where(p => p.CommunityId == communityId).ToListAsync();
             return posts;
         }
 
-        public async Task<List<Member>> GetAllFollowersOfCommunity(int communityId)
+        public async Task<List<Member>> GetAllFollowersOfCommunity(Guid communityId)
         {
             var members = await _context.Followings
                 .Where(f => f.CommunityId == communityId)
@@ -54,25 +54,12 @@ namespace SocialMediaWebApp.Repositories
             return members;
         }
 
-        public async Task<bool> CommunityExists(int communityId)
+        public async Task<bool> CommunityExists(Guid communityId)
         {
             var community = await _context.Communities.AsNoTracking().FirstOrDefaultAsync(c => c.Id == communityId);
             return community != null;
         }
 
-        public int GetFirstAvailableId()
-        {
-            var communities = _context.Posts.AsNoTracking().ToList();
-            if (communities.Count == 0)
-            {
-                return 1;
-            }
-            else
-            {
-                var lastId = communities.Select(p => p.Id).Last();
-                return lastId + 1;
-            }
-        }
 
         public bool Create(Community community)
         {

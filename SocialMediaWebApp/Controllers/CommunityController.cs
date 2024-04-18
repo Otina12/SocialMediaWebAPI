@@ -34,7 +34,7 @@ namespace SocialMediaWebApp.Controllers
         }
 
         [HttpGet("{communityId}/Posts")]
-        public async Task<ActionResult<List<PostDto>>> GetAllPostsOfCommunity([FromRoute] int communityId, [FromQuery] QueryObject queryObject)
+        public async Task<ActionResult<List<PostDto>>> GetAllPostsOfCommunity([FromRoute] Guid communityId, [FromQuery] QueryObject queryObject)
         {
             var posts = await _communityRepository.GetAllPostsOfCommunity(communityId, queryObject);
             var postDtos = posts.Select(p => p.MapToPostDto());
@@ -43,7 +43,7 @@ namespace SocialMediaWebApp.Controllers
         }
 
         [HttpGet("{communityId}/Followers")]
-        public async Task<ActionResult<List<Member>>> GetAllFollowersOfCommunity([FromRoute] int communityId)
+        public async Task<ActionResult<List<Member>>> GetAllFollowersOfCommunity([FromRoute] Guid communityId)
         {
             var communityExists = await _communityRepository.CommunityExists(communityId);
 
@@ -82,27 +82,27 @@ namespace SocialMediaWebApp.Controllers
         [HttpDelete]
         [Authorize]
         [Route("Delete/{communityId}")]
-        public async Task<IActionResult> DeleteCommunity([FromRoute] int communityId)
+        public async Task<IActionResult> DeleteCommunity([FromRoute] Guid communityId)
         {
             var community = await _communityRepository.GetCommunityById(communityId);
 
-            if(community == null)
+            if (community == null)
             {
                 ModelState.AddModelError("404", "Community was not found");
                 return BadRequest(ModelState);
             }
 
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            if(curUserId != community.CreatorId)
+            if (curUserId != community.CreatorId)
             {
                 return BadRequest("You are not allowed access to this community");
             }
 
             var posts = await _communityRepository.GetAllPostsOfCommunity(communityId);
-            foreach(var post in posts)
+            foreach (var post in posts)
             {
                 var comments = await _commentRepository.GetAllCommentsOfPost(community.Id, post.Id);
-                foreach(var com in comments)
+                foreach (var com in comments)
                 {
                     _commentRepository.Delete(com);
                 }
@@ -111,7 +111,7 @@ namespace SocialMediaWebApp.Controllers
 
 
             var followings = await _followRepository.GetFollowingsOfCommunity(communityId);
-            foreach(var following in followings)
+            foreach (var following in followings)
             {
                 _followRepository.Unfollow(following);
             }

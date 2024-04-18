@@ -34,7 +34,7 @@ namespace SocialMediaWebApp.Controllers
 
 
         [HttpGet("{communityId}/{postId}")]
-        public async Task<IActionResult> GetPostById([FromRoute] int communityId, [FromRoute] int postId)
+        public async Task<IActionResult> GetPostById([FromRoute] Guid communityId, [FromRoute] Guid postId)
         {
             var post = await _postRepository.GetPostByIdAsync(communityId, postId);
 
@@ -52,7 +52,7 @@ namespace SocialMediaWebApp.Controllers
 
 
         [HttpGet("{communityId}/{postId}/Comments")]
-        public async Task<ActionResult<List<CommentDto>>> GetAllCommentsOfPost([FromRoute] int communityId, [FromRoute] int postId)
+        public async Task<ActionResult<List<CommentDto>>> GetAllCommentsOfPost([FromRoute] Guid communityId, [FromRoute] Guid postId)
         {
             var comments = await _commentRepository.GetAllCommentsOfPost(communityId, postId);
             var commentDtos = comments.Select(c => c.MapToCommentDto());
@@ -63,7 +63,7 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPost("{communityId}/Create")]
         [Authorize]
-        public async Task<IActionResult> Create([FromRoute] int communityId, [FromBody] CreatePostDto createPostDto)
+        public async Task<IActionResult> Create([FromRoute] Guid communityId, [FromBody] CreatePostDto createPostDto)
         {
             var communityExists = await _communityRepository.CommunityExists(communityId);
 
@@ -73,7 +73,7 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            int newPostId = _postRepository.GetFirstAvailableId(communityId);
+            var newPostId = Guid.NewGuid();
             
 
             var post = createPostDto.MapToPost();
@@ -96,7 +96,7 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPatch("{communityId}/{postId}/Edit")]
         [Authorize]
-        public async Task<IActionResult> Edit([FromRoute] int communityId, [FromRoute] int postId, [FromBody] string content) // we only need content so I'll not use DTO
+        public async Task<IActionResult> Edit([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromBody] string content) // we only need content so I'll not use DTO
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var post = await _postRepository.GetPostByIdAsync(communityId, postId);
@@ -129,7 +129,7 @@ namespace SocialMediaWebApp.Controllers
         [HttpDelete]
         [Authorize]
         [Route("{communityId}/{postId}/Delete")]
-        public async Task<IActionResult> DeletePost([FromRoute] int communityId, [FromRoute] int postId)
+        public async Task<IActionResult> DeletePost([FromRoute] Guid communityId, [FromRoute] Guid postId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var post = await _postRepository.GetPostByIdAsync(communityId, postId);

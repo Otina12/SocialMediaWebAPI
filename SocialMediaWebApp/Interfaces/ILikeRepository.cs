@@ -2,10 +2,10 @@
 {
     public interface ILikeRepository
     {
-        bool LikePost(string memberID, int communityId, int postId);
-        Task<bool> RemoveAllLikedOfPost(int communityId, int postId);
-        bool LikeComment(string memberID, int communityId, int postId, int commentId);
-        Task<bool> RemoveAllLikedOfComment(int communityId, int postId, int commentId);
+        bool LikePost(string memberID, Guid communityId, Guid postId);
+        Task<bool> RemoveAllLikedOfPost(Guid communityId, Guid postId);
+        bool LikeComment(string memberID, Guid communityId, Guid postId, Guid commentId);
+        Task<bool> RemoveAllLikedOfComment(Guid communityId, Guid postId, Guid commentId);
         bool Save();
     }
 }
