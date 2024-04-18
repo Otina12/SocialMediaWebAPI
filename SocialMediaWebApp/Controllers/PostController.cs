@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using SocialMediaWebApp.Core.IConfiguration;
+using SocialMediaWebApp.Core.IRepositories;
 using SocialMediaWebApp.DTOs;
 using SocialMediaWebApp.Extensions;
-using SocialMediaWebApp.Interfaces;
 using SocialMediaWebApp.Mappers;
 using SocialMediaWebApp.Models;
-using SocialMediaWebApp.Repositories;
 using System.Net.Http;
 
 namespace SocialMediaWebApp.Controllers
@@ -16,31 +16,26 @@ namespace SocialMediaWebApp.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly IPostRepository _postRepository;
-        private readonly ICommentRepository _commentRepository;
-        private readonly ICommunityRepository _communityRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILikeRepository _likeRepository;
         private readonly IHttpContextAccessor _httpContext;
 
-        public PostController(IPostRepository postRepository, ICommentRepository commentRepository, 
-            ICommunityRepository communityRepository, ILikeRepository likeRepository, IHttpContextAccessor httpContext)
+        public PostController(IUnitOfWork unitOfWork, ILikeRepository likeRepository, IHttpContextAccessor httpContext)
         {
-            _postRepository = postRepository;
-            _commentRepository = commentRepository;
-            _communityRepository = communityRepository;
+            _unitOfWork = unitOfWork;
             _likeRepository = likeRepository;
             _httpContext = httpContext;
         }
 
 
-        [HttpGet("{communityId}/{postId}")]
-        public async Task<IActionResult> GetPostById([FromRoute] Guid communityId, [FromRoute] Guid postId)
+        [HttpGet("{postId}")]
+        public async Task<IActionResult> GetPostById([FromRoute] Guid postId)
         {
-            var post = await _postRepository.GetPostByIdAsync(communityId, postId);
+            var post = await _unitOfWork.Posts.GetById(postId);
 
             if (post == null)
             {
-                Log.Error("Post [CommunityId: {communityId}, PostId: {postId}] was not found", communityId, postId);
+                Log.Error("Post [PostId: {postId}] was not found", postId);
                 return NotFound();
             }
 
@@ -51,10 +46,10 @@ namespace SocialMediaWebApp.Controllers
         }
 
 
-        [HttpGet("{communityId}/{postId}/Comments")]
-        public async Task<ActionResult<List<CommentDto>>> GetAllCommentsOfPost([FromRoute] Guid communityId, [FromRoute] Guid postId)
+        [HttpGet("{postId}/Comments")]
+        public async Task<ActionResult<List<CommentDto>>> GetAllCommentsOfPost([FromRoute] Guid postId)
         {
-            var comments = await _commentRepository.GetAllCommentsOfPost(communityId, postId);
+            var comments = await _unitOfWork.Comments.GetAllCommentsOfPost(postId);
             var commentDtos = comments.Select(c => c.MapToCommentDto());
 
             return Ok(commentDtos);
@@ -65,7 +60,7 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromRoute] Guid communityId, [FromBody] CreatePostDto createPostDto)
         {
-            var communityExists = await _communityRepository.CommunityExists(communityId);
+            var communityExists = await _unitOfWork.Communities.CommunityExists(communityId);
 
             if (!communityExists)
             {
@@ -73,16 +68,12 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var newPostId = Guid.NewGuid();
-            
-
             var post = createPostDto.MapToPost();
 
-            post.CommunityId = communityId;
-            post.Id = newPostId;
+            post.Id = Guid.NewGuid();
             post.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
 
-            var created = _postRepository.Create(post);
+            var created = await _unitOfWork.Posts.Add(post);
 
             if (!created)
             {
@@ -90,18 +81,20 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            await _unitOfWork.CompleteAsync();
+
             return Ok(post);
         }
 
 
-        [HttpPatch("{communityId}/{postId}/Edit")]
+        [HttpPatch("{postId}/Edit")]
         [Authorize]
-        public async Task<IActionResult> Edit([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromBody] string content) // we only need content so I'll not use DTO
+        public async Task<IActionResult> Edit([FromRoute] Guid postId, [FromBody] CreatePostDto postDto)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var post = await _postRepository.GetPostByIdAsync(communityId, postId);
+            var post = await _unitOfWork.Posts.GetById(postId);
 
-            if (post == null)
+            if (post is null)
             {
                 ModelState.AddModelError("404", "Post was not found");
                 return BadRequest(ModelState);
@@ -112,14 +105,16 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest("You are not allowed to edit this post");
             }
 
-            post!.Content = content;
-            var updated = _postRepository.Update(post);
+            post!.Content = postDto.Content;
+            var updated = await _unitOfWork.Posts.Update(post);
 
             if (!updated)
             {
                 ModelState.AddModelError("500", "Something went wrong while editing a post");
                 return BadRequest(ModelState);
             }
+
+            await _unitOfWork.CompleteAsync();
 
             return Ok(post);
         }
@@ -128,13 +123,13 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpDelete]
         [Authorize]
-        [Route("{communityId}/{postId}/Delete")]
-        public async Task<IActionResult> DeletePost([FromRoute] Guid communityId, [FromRoute] Guid postId)
+        [Route("{postId}/Delete")]
+        public async Task<IActionResult> DeletePost([FromRoute] Guid postId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var post = await _postRepository.GetPostByIdAsync(communityId, postId);
+            var post = await _unitOfWork.Posts.GetById(postId);
 
-            if(post == null)
+            if(post is null)
             {
                 ModelState.AddModelError("404", "Post was not found");
                 return BadRequest(ModelState);
@@ -145,21 +140,23 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest("You are not allowed to delete this post");
             }
 
-            var comments = await _commentRepository.GetAllCommentsOfPost(communityId, postId);
+            var comments = await _unitOfWork.Comments.GetAllCommentsOfPost(postId);
             foreach(var comment in comments)
             {
-                _commentRepository.Delete(comment);
+                await _unitOfWork.Comments.Delete(comment.Id);
             }
 
-            await _likeRepository.RemoveAllLikedOfPost(communityId, postId);
+            await _likeRepository.RemoveAllLikedOfPost(postId);
 
-            var deleted = _postRepository.Delete(post);
+            var deleted = await _unitOfWork.Posts.Delete(postId);
 
             if (!deleted)
             {
                 ModelState.AddModelError("500", "Something went wrong while deleting a post");
                 return BadRequest(ModelState);
             }
+
+            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }

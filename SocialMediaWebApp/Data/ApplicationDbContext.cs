@@ -49,7 +49,7 @@ namespace SocialMediaWebApp.Data
             modelBuilder.Entity<Like>()
                 .HasOne(l => l.Post)
                 .WithMany(p => p.Likes)
-                .HasForeignKey(l => new { l.PostId, l.CommunityId });
+                .HasForeignKey(l => l.PostId);
 
             modelBuilder.Entity<Like>()
                 .HasOne(l => l.Member)
@@ -59,7 +59,7 @@ namespace SocialMediaWebApp.Data
             modelBuilder.Entity<LikeComment>()
                 .HasOne(l => l.Comment)
                 .WithMany(c => c.Likes)
-                .HasForeignKey(l => new { l.CommentId, l.PostId, l.CommunityId });
+                .HasForeignKey(l => l.CommentId);
 
             modelBuilder.Entity<LikeComment>()
                 .HasOne(l => l.Member)

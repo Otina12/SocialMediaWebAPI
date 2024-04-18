@@ -7,7 +7,6 @@ namespace SocialMediaWebApp.DTOs
     public class PostDto
     {
         public Guid Id { get; set; }
-        public Guid CommunityId { get; set; }
         public string MemberId { get; set; }
         public string Content { get; set; }
         public DateTime PostTime { get; set; }

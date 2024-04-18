@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SocialMediaWebApp.Core.IConfiguration;
+using SocialMediaWebApp.Core.IRepositories;
 using SocialMediaWebApp.DTOs;
 using SocialMediaWebApp.Extensions;
-using SocialMediaWebApp.Interfaces;
 using SocialMediaWebApp.Mappers;
 using SocialMediaWebApp.Models;
-using SocialMediaWebApp.Repositories;
 
 namespace SocialMediaWebApp.Controllers
 {
@@ -13,21 +13,19 @@ namespace SocialMediaWebApp.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
-        private readonly ICommentRepository _commentRepository;
-        private readonly IPostRepository _postRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContext;
 
-        public CommentController(ICommentRepository commentRepository, IPostRepository postRepository, IHttpContextAccessor httpContext)
+        public CommentController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext)
         {
-            _commentRepository = commentRepository;
-            _postRepository = postRepository;
+            _unitOfWork = unitOfWork;
             _httpContext = httpContext;
         }
 
-        [HttpGet("{communityId}/{postId}/{commentId}")]
-        public async Task<ActionResult<List<CommentDto>>> GetCommentOfPost([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromRoute] Guid commentId)
+        [HttpGet("{commentId}")]
+        public async Task<ActionResult<List<CommentDto>>> GetCommentOfPost([FromRoute] Guid commentId)
         {
-            var comment = await _commentRepository.GetCommentById(communityId, postId, commentId);
+            var comment = await _unitOfWork.Comments.GetById(commentId);
 
             if (comment == null)
             {
@@ -40,21 +38,21 @@ namespace SocialMediaWebApp.Controllers
         }
 
 
-        [HttpGet("{communityId}/{postId}/{commentId}/Replies")]
-        public async Task<ActionResult<List<CommentDto>>> GetRepliesOfComment([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromRoute] Guid commentId)
+        [HttpGet("{commentId}/Replies")]
+        public async Task<ActionResult<List<CommentDto>>> GetRepliesOfComment(Guid commentId)
         {
-            var comments = await _commentRepository.GetAllRepliesOfAComment(communityId, postId, commentId);
+            var comments = await _unitOfWork.Comments.GetAllRepliesOfAComment(commentId);
             var commentDtos = comments.Select(c => c.MapToCommentDto());
 
             return Ok(commentDtos);
         }
 
 
-        [HttpPost("{communityId}/{postId}/Write")]
+        [HttpPost("/{postId}/AddComment")]
         [Authorize]
-        public async Task<IActionResult> AddComment([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromBody] CreateCommentDto createCommentDto)
+        public async Task<IActionResult> AddComment([FromRoute] Guid postId, [FromBody] CreateCommentDto createCommentDto)
         {
-            var postExists = await _postRepository.PostExists(communityId, postId);
+            var postExists = await _unitOfWork.Posts.PostExists(postId);
 
             if (!postExists)
             {
@@ -65,11 +63,9 @@ namespace SocialMediaWebApp.Controllers
             var comment = createCommentDto.MapToComment();
 
             comment.Id = Guid.NewGuid();
-            comment.PostId = postId;
-            comment.CommunityId = communityId;
             comment.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
 
-            var created = _commentRepository.Create(comment);
+            var created = await _unitOfWork.Comments.Add(comment);
 
             if (!created)
             {
@@ -77,15 +73,16 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            await _unitOfWork.CompleteAsync();
             return Ok(comment);
         }
 
 
-        [HttpPatch("{communityId}/{postId}/{commentId}/Edit")]
+        [HttpPatch("{commentId}/Edit")]
         [Authorize]
-        public async Task<IActionResult> EditComment([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromRoute] Guid commentId, [FromBody] string content)
+        public async Task<IActionResult> EditComment([FromRoute] Guid commentId, [FromBody] string content)
         {
-            var comment = await _commentRepository.GetCommentById(communityId, postId, commentId);
+            var comment = await _unitOfWork.Comments.GetById(commentId);
 
             if (comment == null)
             {
@@ -100,7 +97,7 @@ namespace SocialMediaWebApp.Controllers
             }
 
             comment!.Content = content;
-            var updated = _commentRepository.Update(comment);
+            var updated = await _unitOfWork.Comments.Update(comment);
 
             if (!updated)
             {
@@ -108,15 +105,15 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            await _unitOfWork.CompleteAsync();
             return Ok(comment);
         }
 
-        [HttpPost("{communityId}/{postId}/{commentId}/Replies/Add")]
+        [HttpPost("{commentId}/Replies/Add")]
         [Authorize]
-        public async Task<IActionResult> AddReply([FromRoute] Guid communityId, [FromRoute] Guid postId,
-            [FromRoute] Guid commentId, [FromBody] CreateCommentDto createCommentDto)
+        public async Task<IActionResult> AddReply([FromRoute] Guid commentId, [FromBody] CreateCommentDto createCommentDto)
         {
-            var commentExists = await _commentRepository.CommentExists(communityId, postId, commentId);
+            var commentExists = await _unitOfWork.Comments.CommentExists(commentId);
 
             if (!commentExists)
             {
@@ -127,13 +124,11 @@ namespace SocialMediaWebApp.Controllers
             var comment = createCommentDto.MapToComment();
 
             comment.Id = Guid.NewGuid();
-            comment.PostId = postId;
-            comment.CommunityId = communityId;
             comment.IsReply = true;
             comment.IsReplyToId = commentId;
             comment.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
 
-            var created = _commentRepository.Create(comment);
+            var created = await _unitOfWork.Comments.Add(comment);
 
             if (!created)
             {
@@ -141,16 +136,17 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            await _unitOfWork.CompleteAsync();
             return Ok(comment);
         }
 
 
         [HttpDelete]
         [Authorize]
-        [Route("Delete/{communityId}/{postId}/{commentId}")]
-        public async Task<IActionResult> DeleteComment([FromRoute] Guid communityId, [FromRoute] Guid postId, [FromRoute] Guid commentId)
+        [Route("{commentId}/Delete")]
+        public async Task<IActionResult> DeleteComment([FromRoute] Guid commentId)
         {
-            var comment = await _commentRepository.GetCommentById(communityId, postId, commentId);
+            var comment = await _unitOfWork.Comments.GetCommentById(commentId);
 
             if(comment is null)
             {
@@ -164,13 +160,15 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest("You are not allowed to delete this comment");
             }
 
-            var replies = await _commentRepository.GetAllRepliesOfAComment(communityId, postId, commentId);
+            var replies = await _unitOfWork.Comments.GetAllRepliesOfAComment(commentId);
+
             foreach(var reply in replies)
             {
-                _commentRepository.Delete(reply);
+                await _unitOfWork.Comments.Delete(reply.Id);
             }
 
-            _commentRepository.Delete(comment);
+            await _unitOfWork.Comments.Delete(commentId);
+            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SocialMediaWebApp.Core.IConfiguration;
+using SocialMediaWebApp.Core.IRepositories;
 using SocialMediaWebApp.DTOs;
 using SocialMediaWebApp.Extensions;
-using SocialMediaWebApp.Interfaces;
 using SocialMediaWebApp.Mappers;
 
 
@@ -12,22 +13,18 @@ namespace SocialMediaWebApp.Controllers
     [ApiController]
     public class MemberController : ControllerBase
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMemberRepository _memberRepository;
-        private readonly IPostRepository _postRepository;
         private readonly ILikeRepository _likeRepository;
-        private readonly ICommunityRepository _communityRepository;
-        private readonly ICommentRepository _commentRepository;
         private readonly IFollowRepository _followRepository;
         private readonly IHttpContextAccessor _httpContext;
 
-        public MemberController(IMemberRepository memberRepository, IPostRepository postRepository, ILikeRepository likeRepository,
-            ICommunityRepository communityRepository, ICommentRepository commentRepository, IFollowRepository followRepository, IHttpContextAccessor httpContext)
+        public MemberController(IMemberRepository memberRepository, ILikeRepository likeRepository, IUnitOfWork unitOfWork,
+            IFollowRepository followRepository, IHttpContextAccessor httpContext)
         {
+            _unitOfWork = unitOfWork;
             _memberRepository = memberRepository;
-            _postRepository = postRepository;
             _likeRepository = likeRepository;
-            _communityRepository = communityRepository;
-            _commentRepository = commentRepository;
             _followRepository = followRepository;
             _httpContext = httpContext;
         }
@@ -35,14 +32,14 @@ namespace SocialMediaWebApp.Controllers
         [HttpGet("{memberId}/Posts")]
         public async Task<IActionResult> GetAllPostsOfUser([FromRoute] string memberId)
         {
-            var posts = await _postRepository.GetAllPostsOfMemberAsync(memberId);
+            var posts = await _unitOfWork.Posts.GetAllPostsOfMemberAsync(memberId);
             return Ok(posts);
         }
 
         [HttpGet("{memberId}/Comments")]
         public async Task<IActionResult> GetAllCommentsOfUser([FromRoute] string memberId)
         {
-            var comments = await _commentRepository.GetAllCommentsOfMember(memberId);
+            var comments = await _unitOfWork.Comments.GetAllCommentsOfMember(memberId);
             return Ok(comments);
         }
 
@@ -52,7 +49,7 @@ namespace SocialMediaWebApp.Controllers
         public async Task<IActionResult> FollowCommunity([FromRoute] Guid communityId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var communityExists = await _communityRepository.CommunityExists(communityId);
+            var communityExists = await _unitOfWork.Communities.CommunityExists(communityId);
 
             if (!communityExists)
             {
@@ -63,10 +60,12 @@ namespace SocialMediaWebApp.Controllers
             var followed = _followRepository.Follow(curUserId, communityId);
             if (followed)
             {
-                var community = await _communityRepository.GetCommunityById(communityId);
+                var community = await _unitOfWork.Communities.GetById(communityId);
                 community!.MemberCount += 1;
-                _communityRepository.Update(community);
+                await _unitOfWork.Communities.Update(community);
             }
+
+            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }
@@ -76,7 +75,7 @@ namespace SocialMediaWebApp.Controllers
         public async Task<IActionResult> UnFollowCommunity([FromRoute] Guid communityId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var communityExists = await _communityRepository.CommunityExists(communityId);
+            var communityExists = await _unitOfWork.Communities.CommunityExists(communityId);
 
             if (!communityExists)
             {
@@ -94,20 +93,22 @@ namespace SocialMediaWebApp.Controllers
             var followed = _followRepository.Unfollow(following!);
             if (followed)
             {
-                var community = await _communityRepository.GetCommunityById(communityId);
+                var community = await _unitOfWork.Communities.GetById(communityId);
                 community!.MemberCount -= 1;
-                _communityRepository.Update(community);
+                await _unitOfWork.Communities.Update(community);
             }
+
+            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }
 
-        [HttpPost("{memberId}/Like/{communityId}/{postId}")]
+        [HttpPost("{memberId}/Like/{postId}")]
         [Authorize]
-        public async Task<IActionResult> LikePost([FromRoute] string memberId, [FromRoute] Guid postId, [FromRoute] Guid communityId)
+        public async Task<IActionResult> LikePost([FromRoute] string memberId, [FromRoute] Guid postId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var postExists = await _postRepository.PostExists(communityId, postId);
+            var postExists = await _unitOfWork.Posts.PostExists(postId);
 
             if (!postExists)
             {
@@ -115,12 +116,14 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var liked = _likeRepository.LikePost(curUserId, communityId, postId);
+            var liked = _likeRepository.LikePost(curUserId, postId);
             if (liked)
             {
-                var post = await _postRepository.GetPostByIdAsync(communityId, postId);
+                var post = await _unitOfWork.Posts.GetById(postId);
                 post!.LikeCount += 1;
             }
+
+            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }
@@ -128,11 +131,11 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPost]
         [Authorize]
-        [Route("Like/{communityId}/{postId}/{commentId}")]
-        public async Task<IActionResult> LikeComment([FromRoute] Guid commentId, [FromRoute] Guid postId, [FromRoute] Guid communityId)
+        [Route("Like/{commentId}")]
+        public async Task<IActionResult> LikeComment([FromRoute] Guid commentId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var postExists = await _commentRepository.CommentExists(communityId, postId, commentId);
+            var postExists = await _unitOfWork.Comments.CommentExists(commentId);
 
             if (!postExists)
             {
@@ -140,12 +143,8 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var liked = _likeRepository.LikeComment(curUserId, communityId, postId, commentId);
-            if (liked)
-            {
-                var post = await _postRepository.GetPostByIdAsync(communityId, postId);
-                post!.LikeCount += 1;
-            }
+            _likeRepository.LikeComment(curUserId, commentId);
+            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }

@@ -12,7 +12,6 @@ namespace SocialMediaWebApp.Mappers
             return new PostDto
             {
                 Id = post.Id,
-                CommunityId = post.CommunityId,
                 MemberId = post.MemberId,
                 Content = post.Content,
                 PostTime = post.PostTime,
@@ -27,7 +26,6 @@ namespace SocialMediaWebApp.Mappers
             return new Post
             {
                 Id = Guid.Empty,
-                CommunityId = Guid.Empty,
                 Content = postDto.Content,
                 PostTime = DateTime.Now,
                 IsEdited = false,

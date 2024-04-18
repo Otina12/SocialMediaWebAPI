@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SocialMediaWebApp.Core.IRepositories;
 using SocialMediaWebApp.DTOs;
-using SocialMediaWebApp.Interfaces;
 using SocialMediaWebApp.Models;
 
 namespace SocialMediaWebApp.Controllers

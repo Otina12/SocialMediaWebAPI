@@ -1,5 +1,5 @@
-﻿using SocialMediaWebApp.DTOs;
-using SocialMediaWebApp.Interfaces;
+﻿using SocialMediaWebApp.Core.IRepositories;
+using SocialMediaWebApp.DTOs;
 using SocialMediaWebApp.Mappers;
 using SocialMediaWebApp.Models;
 

@@ -8,8 +8,7 @@ namespace SocialMediaWebApp.Models
         public Guid Id { get; set; }
         public string Url { get; set; } = null!;
         public Guid PostId { get; set; }
-        public Guid CommunityId { get; set; }
-        [ForeignKey("PostId, CommunityId")]
+        [ForeignKey("PostId")]
         public Post Post { get; set; }
     }
 }

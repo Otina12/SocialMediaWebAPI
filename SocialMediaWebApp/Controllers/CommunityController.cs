@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaWebApp.DTOs;
 using SocialMediaWebApp.Helpers;
-using SocialMediaWebApp.Interfaces;
 using SocialMediaWebApp.Mappers;
 using SocialMediaWebApp.Models;
 using SocialMediaWebApp.Extensions;
-using SocialMediaWebApp.Repositories;
 using System.Security.Claims;
+using SocialMediaWebApp.Core.IRepositories;
+using SocialMediaWebApp.Core.IConfiguration;
 
 namespace SocialMediaWebApp.Controllers
 {
@@ -17,18 +17,15 @@ namespace SocialMediaWebApp.Controllers
     [ApiController]
     public class CommunityController : ControllerBase
     {
-        private readonly ICommunityRepository _communityRepository;
-        private readonly IPostRepository _postRepository;
-        private readonly ICommentRepository _commentRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IFollowRepository _followRepository;
+        private readonly IMemberRepository _memberRepository;
         private readonly IHttpContextAccessor _httpContext;
 
-        public CommunityController(ICommunityRepository communityRepository, IPostRepository postRepository,
-            ICommentRepository commentRepository, IFollowRepository followRepository, IHttpContextAccessor httpContext)
+        public CommunityController(IUnitOfWork unitOfWork, IMemberRepository memberRepository, IFollowRepository followRepository, IHttpContextAccessor httpContext)
         {
-            _communityRepository = communityRepository;
-            _postRepository = postRepository;
-            _commentRepository = commentRepository;
+            _unitOfWork = unitOfWork;
+            _memberRepository = memberRepository;
             _followRepository = followRepository;
             _httpContext = httpContext;
         }
@@ -36,7 +33,7 @@ namespace SocialMediaWebApp.Controllers
         [HttpGet("{communityId}/Posts")]
         public async Task<ActionResult<List<PostDto>>> GetAllPostsOfCommunity([FromRoute] Guid communityId, [FromQuery] QueryObject queryObject)
         {
-            var posts = await _communityRepository.GetAllPostsOfCommunity(communityId, queryObject);
+            var posts = await _unitOfWork.Posts.GetAllPostsOfCommunity(communityId, queryObject);
             var postDtos = posts.Select(p => p.MapToPostDto());
 
             return Ok(postDtos);
@@ -45,7 +42,7 @@ namespace SocialMediaWebApp.Controllers
         [HttpGet("{communityId}/Followers")]
         public async Task<ActionResult<List<Member>>> GetAllFollowersOfCommunity([FromRoute] Guid communityId)
         {
-            var communityExists = await _communityRepository.CommunityExists(communityId);
+            var communityExists = await _unitOfWork.Communities.CommunityExists(communityId);
 
             if (!communityExists)
             {
@@ -53,7 +50,7 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var followers = await _communityRepository.GetAllFollowersOfCommunity(communityId);
+            var followers = await _memberRepository.GetAllFollowersOfCommunity(communityId);
             var followersDto = followers.Select(f => f.MapToFollowerDto());
 
             return Ok(followersDto);
@@ -62,12 +59,12 @@ namespace SocialMediaWebApp.Controllers
 
         [HttpPost("Create")]
         [Authorize]
-        public IActionResult CreateCommunity([FromBody] CreateCommunityDto communityDto)
+        public async Task<IActionResult> CreateCommunity([FromBody] CreateCommunityDto communityDto)
         {
             var community = communityDto.MapToCommunity();
             community.CreatorId = _httpContext.HttpContext!.User.GetCurrentUserId();
 
-            var created = _communityRepository.Create(community);
+            var created = await _unitOfWork.Communities.Add(community);
 
             if (!created)
             {
@@ -75,16 +72,18 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            await _unitOfWork.CompleteAsync();
+
             return Ok(community);
         }
 
 
         [HttpDelete]
         [Authorize]
-        [Route("Delete/{communityId}")]
+        [Route("{communityId}/Delete")]
         public async Task<IActionResult> DeleteCommunity([FromRoute] Guid communityId)
         {
-            var community = await _communityRepository.GetCommunityById(communityId);
+            var community = await _unitOfWork.Communities.GetById(communityId);
 
             if (community == null)
             {
@@ -98,15 +97,15 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest("You are not allowed access to this community");
             }
 
-            var posts = await _communityRepository.GetAllPostsOfCommunity(communityId);
+            var posts = await _unitOfWork.Posts.GetAllPostsOfCommunity(communityId);
             foreach (var post in posts)
             {
-                var comments = await _commentRepository.GetAllCommentsOfPost(community.Id, post.Id);
-                foreach (var com in comments)
+                var comments = await _unitOfWork.Comments.GetAllCommentsOfPost(post.Id);
+                foreach (var comment in comments)
                 {
-                    _commentRepository.Delete(com);
+                    await _unitOfWork.Comments.Delete(comment.Id);
                 }
-                _postRepository.Delete(post);
+                await _unitOfWork.Posts.Delete(post.Id);
             }
 
 
@@ -116,7 +115,8 @@ namespace SocialMediaWebApp.Controllers
                 _followRepository.Unfollow(following);
             }
 
-            _communityRepository.Delete(community);
+            await _unitOfWork.Communities.Delete(communityId);
+            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }

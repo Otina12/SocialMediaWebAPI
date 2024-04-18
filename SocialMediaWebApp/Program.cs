@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using SocialMediaWebApp.Core.IConfiguration;
+using SocialMediaWebApp.Core.IRepositories;
+using SocialMediaWebApp.Core.Repositories;
 using SocialMediaWebApp.Data;
-using SocialMediaWebApp.Interfaces;
 using SocialMediaWebApp.Models;
-using SocialMediaWebApp.Repositories;
 using SocialMediaWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,12 +56,13 @@ builder.Services.AddHangfire(config => config
     .UseRecommendedSerializerSettings()
     .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddHangfireServer();
+//builder.Services.AddHangfireServer();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IWelcomeService, WelcomeService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
-builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+//builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
+//builder.Services.AddScoped<IPostRepository, PostRepository>();
+//builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IFollowRepository, FollowRepository>();
 builder.Services.AddScoped<ILikeRepository, LikeRepository>();

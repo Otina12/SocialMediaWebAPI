@@ -10,8 +10,6 @@ namespace SocialMediaWebApp.Mappers
             return new CommentDto
             {
                 Id = Comment.Id,
-                PostId = Comment.PostId,
-                CommunityId = Comment.CommunityId,
                 MemberId = Comment.MemberId,
                 Content = Comment.Content,
                 CreateTime = Comment.CreateTime,
@@ -26,8 +24,6 @@ namespace SocialMediaWebApp.Mappers
             return new Comment
             {
                 Id = Guid.Empty,
-                PostId = Guid.Empty,
-                CommunityId = Guid.Empty,
                 Content = commentDto.Content,
                 CreateTime = DateTime.Now,
                 IsEdited = false,

@@ -1,4 +1,4 @@
-﻿using SocialMediaWebApp.Interfaces;
+﻿using SocialMediaWebApp.Core.IRepositories;
 
 namespace SocialMediaWebApp.Services
 {
