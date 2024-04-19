@@ -25,13 +25,6 @@ namespace SocialMediaWebApp.Core.Repositories
             return comments;
         }
 
-        public async Task<Comment?> GetCommentById(Guid commentId)
-        {
-            var comment = await dbSet
-                .FirstOrDefaultAsync(c => c.Id == commentId);
-            return comment;
-        }
-
         public async Task<List<Comment>> GetAllCommentsOfMember(string memberId)
         {
             var comments = await dbSet

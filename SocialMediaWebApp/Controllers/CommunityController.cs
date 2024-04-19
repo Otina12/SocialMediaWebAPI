@@ -18,16 +18,21 @@ namespace SocialMediaWebApp.Controllers
     public class CommunityController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IFollowRepository _followRepository;
-        private readonly IMemberRepository _memberRepository;
         private readonly IHttpContextAccessor _httpContext;
 
-        public CommunityController(IUnitOfWork unitOfWork, IMemberRepository memberRepository, IFollowRepository followRepository, IHttpContextAccessor httpContext)
+        public CommunityController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext)
         {
             _unitOfWork = unitOfWork;
-            _memberRepository = memberRepository;
-            _followRepository = followRepository;
             _httpContext = httpContext;
+        }
+
+
+        [HttpGet("{communityId}")]
+        public async Task<ActionResult<List<PostDto>>> GetCommunity([FromRoute] Guid communityId)
+        {
+            var community = await _unitOfWork.Communities.GetByIdAsync(communityId);
+
+            return Ok(community);
         }
 
         [HttpGet("{communityId}/Posts")]
@@ -50,7 +55,7 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var followers = await _memberRepository.GetAllFollowersOfCommunity(communityId);
+            var followers = await _unitOfWork.Members.GetAllFollowersOfCommunity(communityId);
             var followersDto = followers.Select(f => f.MapToFollowerDto());
 
             return Ok(followersDto);
@@ -72,7 +77,7 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return Ok(community);
         }
@@ -83,7 +88,7 @@ namespace SocialMediaWebApp.Controllers
         [Route("{communityId}/Delete")]
         public async Task<IActionResult> DeleteCommunity([FromRoute] Guid communityId)
         {
-            var community = await _unitOfWork.Communities.GetById(communityId);
+            var community = await _unitOfWork.Communities.GetByIdAsync(communityId);
 
             if (community == null)
             {
@@ -109,14 +114,14 @@ namespace SocialMediaWebApp.Controllers
             }
 
 
-            var followings = await _followRepository.GetFollowingsOfCommunity(communityId);
+            var followings = await _unitOfWork.Followings.GetFollowingsOfCommunity(communityId);
             foreach (var following in followings)
             {
-                _followRepository.Unfollow(following);
+                _unitOfWork.Followings.Unfollow(following);
             }
 
             await _unitOfWork.Communities.Delete(communityId);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return Ok();
         }

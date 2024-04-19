@@ -24,6 +24,7 @@ namespace SocialMediaWebApp.Mappers
             return new Comment
             {
                 Id = Guid.Empty,
+                MemberId = string.Empty,
                 Content = commentDto.Content,
                 CreateTime = DateTime.Now,
                 IsEdited = false,

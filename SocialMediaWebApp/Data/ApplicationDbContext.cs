@@ -75,7 +75,6 @@ namespace SocialMediaWebApp.Data
                 .HasOne(f => f.Community)
                 .WithMany(c => c.Followers)
                 .HasForeignKey(f => f.CommunityId);
-
         }
     }
 }

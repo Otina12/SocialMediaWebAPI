@@ -8,6 +8,7 @@ namespace SocialMediaWebApp.Models
     {
         [ForeignKey(nameof(Follower))]
         public string FollowerId { get; set; }
+
         [ForeignKey(nameof(Community))]
         public Guid CommunityId { get; set; }
         public Member Follower { get; set; }

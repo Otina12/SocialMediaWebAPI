@@ -13,6 +13,7 @@ namespace SocialMediaWebApp.Models
         public required string Description { get; set; }
         public string? PfpUrl { get; set; }
         public int MemberCount { get; set; }
+
         [ForeignKey(nameof(Member))]
         public string CreatorId { get; set; }
         public Member Member { get; set; }

@@ -37,11 +37,6 @@ namespace SocialMediaWebApp.Core.Repositories
             return members;
         }
 
-        public async Task<List<Community>> GetAllFollowingsOfMember(string memberId)
-        {
-            var communities = await _context.Followings.Where(f => f.FollowerId == memberId).Select(f => f.Community).ToListAsync();
-            return communities;
-        }
 
         public bool Update(Member member)
         {

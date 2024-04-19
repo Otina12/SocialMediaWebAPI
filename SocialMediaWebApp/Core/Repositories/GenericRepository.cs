@@ -4,7 +4,7 @@ using SocialMediaWebApp.Data;
 
 namespace SocialMediaWebApp.Core.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected ApplicationDbContext _context;
         protected DbSet<T> dbSet;
@@ -18,12 +18,12 @@ namespace SocialMediaWebApp.Core.Repositories
         }
 
 
-        public virtual async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await dbSet.ToListAsync();
         }
 
-        public virtual async Task<T?> GetById(Guid id)
+        public virtual async Task<T?> GetByIdAsync(Guid id)
         {
             return await dbSet.FindAsync(id);
         }
@@ -34,16 +34,22 @@ namespace SocialMediaWebApp.Core.Repositories
             return true;
         }
 
-        public virtual Task<bool> Delete(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public virtual Task<bool> Update(T entity)
         {
-            dbSet.Update(entity);
             throw new NotImplementedException();
         }
+
+        public async virtual Task<bool> Delete(Guid id)
+        {
+            var entity = await dbSet.FindAsync(id);
+            if(entity is null)
+            {
+                return false;
+            }
+
+            dbSet.Remove(entity);
+            return true;
+        }
+
     }
 }

@@ -7,5 +7,6 @@ namespace SocialMediaWebApp.Core.IRepositories
     {
         Task<bool> CommunityExists(Guid communityId);
         Task<IEnumerable<Community>> CommunitiesOfMember(string memberId);
+        Task<List<Community>> GetAllFollowingsOfMember(string memberId);
     }
 }

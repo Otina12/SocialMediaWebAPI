@@ -20,6 +20,8 @@ namespace SocialMediaWebApp.Data
 
         public ILikeRepository Likes { get; private set; }
 
+        public IMemberRepository Members { get; private set; }
+
 
         public UnitOfWork(ApplicationDbContext context, ILoggerFactory loggerFactory)
         {
@@ -31,9 +33,10 @@ namespace SocialMediaWebApp.Data
             Comments = new CommentRepository(_context, _logger);
             Followings = new FollowRepository(_context);
             Likes = new LikeRepository(_context);
+            Members = new MemberRepository(_context);
         }
         
-        public async Task CompleteAsync()
+        public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
         }

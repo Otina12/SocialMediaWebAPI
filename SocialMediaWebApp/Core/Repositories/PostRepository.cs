@@ -74,12 +74,6 @@ namespace SocialMediaWebApp.Core.Repositories
             return post != null;
         }
 
-        public async override Task<bool> Delete(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public async override Task<bool> Update(Post entity)
         {
             try

@@ -51,13 +51,13 @@ namespace SocialMediaWebApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8e223009-ee4c-4c37-9f4c-dbb9dca837aa",
+                            Id = "8901ea25-5c4e-40f4-bfde-2e3b66ff4bb5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5df8a2b9-548c-404a-a973-e5ecf6c41fbe",
+                            Id = "b09fa0fb-530b-4bea-89fb-31ff4fc56de2",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -172,12 +172,7 @@ namespace SocialMediaWebApp.Migrations
             modelBuilder.Entity("SocialMediaWebApp.Models.Comment", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommunityId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
@@ -196,7 +191,7 @@ namespace SocialMediaWebApp.Migrations
                     b.Property<bool>("IsReply")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("IsReplyToId")
+                    b.Property<Guid?>("IsReplyToId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("LikeCount")
@@ -206,11 +201,16 @@ namespace SocialMediaWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id", "PostId", "CommunityId");
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsReplyToId");
 
                     b.HasIndex("MemberId");
 
-                    b.HasIndex("PostId", "CommunityId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comments", (string)null);
                 });
@@ -266,16 +266,13 @@ namespace SocialMediaWebApp.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CommunityId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("PostId", "CommunityId", "MemberId");
+                    b.HasKey("PostId", "MemberId");
 
                     b.HasIndex("MemberId");
 
@@ -287,19 +284,13 @@ namespace SocialMediaWebApp.Migrations
                     b.Property<Guid>("CommentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommunityId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("CommentId", "PostId", "CommunityId", "MemberId");
+                    b.HasKey("CommentId", "MemberId");
 
                     b.HasIndex("MemberId");
 
@@ -312,9 +303,6 @@ namespace SocialMediaWebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CommunityId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
@@ -324,7 +312,7 @@ namespace SocialMediaWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId", "CommunityId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("MediaObjects", (string)null);
                 });
@@ -409,13 +397,14 @@ namespace SocialMediaWebApp.Migrations
             modelBuilder.Entity("SocialMediaWebApp.Models.Post", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommunityId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CommentCount")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -437,7 +426,7 @@ namespace SocialMediaWebApp.Migrations
                     b.Property<DateTime>("PostTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id", "CommunityId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CommunityId");
 
@@ -499,6 +488,10 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.Comment", b =>
                 {
+                    b.HasOne("SocialMediaWebApp.Models.Comment", "Reply")
+                        .WithMany("Replies")
+                        .HasForeignKey("IsReplyToId");
+
                     b.HasOne("SocialMediaWebApp.Models.Member", "Member")
                         .WithMany("Comments")
                         .HasForeignKey("MemberId")
@@ -506,14 +499,16 @@ namespace SocialMediaWebApp.Migrations
                         .IsRequired();
 
                     b.HasOne("SocialMediaWebApp.Models.Post", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId", "CommunityId")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Member");
 
                     b.Navigation("Post");
+
+                    b.Navigation("Reply");
                 });
 
             modelBuilder.Entity("SocialMediaWebApp.Models.Community", b =>
@@ -556,7 +551,7 @@ namespace SocialMediaWebApp.Migrations
 
                     b.HasOne("SocialMediaWebApp.Models.Post", "Post")
                         .WithMany("Likes")
-                        .HasForeignKey("PostId", "CommunityId")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -567,15 +562,15 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.LikeComment", b =>
                 {
-                    b.HasOne("SocialMediaWebApp.Models.Member", "Member")
-                        .WithMany("LikedComments")
-                        .HasForeignKey("MemberId")
+                    b.HasOne("SocialMediaWebApp.Models.Comment", "Comment")
+                        .WithMany("Likes")
+                        .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SocialMediaWebApp.Models.Comment", "Comment")
-                        .WithMany("Likes")
-                        .HasForeignKey("CommentId", "PostId", "CommunityId")
+                    b.HasOne("SocialMediaWebApp.Models.Member", "Member")
+                        .WithMany("LikedComments")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -588,7 +583,7 @@ namespace SocialMediaWebApp.Migrations
                 {
                     b.HasOne("SocialMediaWebApp.Models.Post", "Post")
                         .WithMany("Media")
-                        .HasForeignKey("PostId", "CommunityId")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -617,6 +612,8 @@ namespace SocialMediaWebApp.Migrations
             modelBuilder.Entity("SocialMediaWebApp.Models.Comment", b =>
                 {
                     b.Navigation("Likes");
+
+                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("SocialMediaWebApp.Models.Community", b =>
@@ -643,6 +640,8 @@ namespace SocialMediaWebApp.Migrations
 
             modelBuilder.Entity("SocialMediaWebApp.Models.Post", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Likes");
 
                     b.Navigation("Media");

@@ -33,6 +33,12 @@ namespace SocialMediaWebApp.Core.Repositories
             return communities;
         }
 
+        public async Task<List<Community>> GetAllFollowingsOfMember(string memberId)
+        {
+            var communities = await _context.Followings.Where(f => f.FollowerId == memberId).Select(f => f.Community).ToListAsync();
+            return communities;
+        }
+
         //public async override Task<IEnumerable<Community>> GetAll()
         //{
         //    try

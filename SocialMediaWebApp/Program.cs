@@ -15,8 +15,8 @@ using SocialMediaWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, config) =>
-    config.ReadFrom.Configuration(context.Configuration));
+//builder.Host.UseSerilog((context, config) =>
+//    config.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 
@@ -50,11 +50,11 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-builder.Services.AddHangfire(config => config
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddHangfire(config => config
+//    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+//    .UseSimpleAssemblyNameTypeSerializer()
+//    .UseRecommendedSerializerSettings()
+//    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //builder.Services.AddHangfireServer();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -113,7 +113,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseSerilogRequestLogging();
+//app.UseSerilogRequestLogging();
 
 app.UseAuthentication();
 app.UseAuthorization();

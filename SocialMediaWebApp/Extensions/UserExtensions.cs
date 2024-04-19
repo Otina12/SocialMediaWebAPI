@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SocialMediaWebApp.Exceptions;
 using System.Security.Claims;
 
 namespace SocialMediaWebApp.Extensions
@@ -8,7 +9,7 @@ namespace SocialMediaWebApp.Extensions
         public static string GetCurrentUserId(this ClaimsPrincipal principal)
         {
             if(principal is null)
-                throw new ArgumentNullException(nameof(principal));
+                throw new UserNotFoundException("Login required");
 
             return principal.FindFirstValue(ClaimTypes.NameIdentifier)!;
         }
@@ -16,7 +17,7 @@ namespace SocialMediaWebApp.Extensions
         public static string GetCurrentUserName(this ClaimsPrincipal principal)
         {
             if (principal is null)
-                throw new ArgumentNullException(nameof(principal));
+                throw new UserNotFoundException("Login required");
 
             return principal.FindFirstValue(ClaimTypes.Name)!;
         }

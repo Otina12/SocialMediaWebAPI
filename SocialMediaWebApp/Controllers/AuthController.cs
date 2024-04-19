@@ -104,9 +104,9 @@ namespace SocialMediaWebApp.Controllers
         [HttpGet("GetGiorgiToken")]
         public string GetMyToken() // temporary funtion to help me save time with testing authorization
         {
-            return "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9." +
-                "eyJuYW1laWQiOiJkMGNiODNmMS05MTMyLTRmYTYtOWU3Yy1hMDZkOTAzNzY4Y2IiLCJlbWFpbCI6Imdpb3JndW5hQGV4YW1wbGUuY29tIiwiZ2l2ZW5fbmFtZSI6Imdpb3JndW5hIiwibmJmIjoxNzExODgyODMwLCJleHAiOjE3MTI0ODc2MzAsImlhdCI6MTcxMTg4MjgzMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0NDMyNyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDQzMjcvIn0." +
-                "FZvgjR7dJGj2h2jwguiUfHxDu8EkPwRLS47jZY42Xe_y56SkLVh8GcM1N8qQLsJoBI8q9C6A_4NCv5-9fdZm0g";
+            return "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9" +
+                ".eyJuYW1laWQiOiI3ZTA4ODE1NC0wZWVmLTQyMWYtYjNmMy1lYjI0ZmNjZGEzYjkiLCJlbWFpbCI6Imdpb3JnaTFAZXhhbXBsZS5jb20iLCJnaXZlbl9uYW1lIjoiR2lvcmdpIiwibmJmIjoxNzEzNTI0NTMzLCJleHAiOjE3MTQxMjkzMzMsImlhdCI6MTcxMzUyNDUzMywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0NDMyNyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDQzMjcvIn0" +
+                ".pFrcwFIFYEuu8XDpq0vJeVqtjkyIH9Kfkp4tgyTq2j3xLIX96rFyiGY1XZIYCvZT175Tuf1ANFGb8TYjpvi6JA";
         }
     }
 }

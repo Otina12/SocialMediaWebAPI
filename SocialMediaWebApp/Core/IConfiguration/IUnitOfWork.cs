@@ -9,7 +9,8 @@ namespace SocialMediaWebApp.Core.IConfiguration
         ICommentRepository Comments { get; }
         IFollowRepository Followings { get; }
         ILikeRepository Likes { get; }
+        IMemberRepository Members { get; }
 
-        Task CompleteAsync();
+        Task SaveChangesAsync();
     }
 }

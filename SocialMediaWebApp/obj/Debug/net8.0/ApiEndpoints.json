@@ -128,8 +128,8 @@
         "IsRequired": true
       },
       {
-        "Name": "content",
-        "Type": "System.String",
+        "Name": "createCommentDto",
+        "Type": "SocialMediaWebApp.DTOs.CreateCommentDto",
         "IsRequired": true
       }
     ],
@@ -181,6 +181,32 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SocialMediaWebApp.Controllers.CommunityController",
+    "Method": "GetCommunity",
+    "RelativePath": "api/Community/{communityId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "communityId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[SocialMediaWebApp.DTOs.PostDto, SocialMediaWebApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "SocialMediaWebApp.Controllers.CommunityController",
@@ -299,27 +325,6 @@
   },
   {
     "ContainingType": "SocialMediaWebApp.Controllers.MemberController",
-    "Method": "LikePost",
-    "RelativePath": "api/Member/{memberId}/Like/{postId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "memberId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "postId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SocialMediaWebApp.Controllers.MemberController",
     "Method": "GetAllPostsOfUser",
     "RelativePath": "api/Member/{memberId}/Posts",
     "HttpMethod": "GET",
@@ -388,8 +393,24 @@
   },
   {
     "ContainingType": "SocialMediaWebApp.Controllers.MemberController",
+    "Method": "LikePost",
+    "RelativePath": "api/Member/Like/{postId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SocialMediaWebApp.Controllers.MemberController",
     "Method": "LikeComment",
-    "RelativePath": "api/Member/Like/{commentId}",
+    "RelativePath": "api/Member/LikeComment/{commentId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

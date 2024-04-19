@@ -8,7 +8,6 @@ namespace SocialMediaWebApp.Core.IRepositories
         Task<Member?> GetMemberById(string id);
         Task<bool> MemberExists(string memberId);
         Task<List<Member>> GetAllFollowersOfCommunity(Guid communityId);
-        Task<List<Community>> GetAllFollowingsOfMember(string memberId);
         bool Update(Member member);
     }
 }

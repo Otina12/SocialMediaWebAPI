@@ -25,7 +25,7 @@ namespace SocialMediaWebApp.Controllers
         [HttpGet("{commentId}")]
         public async Task<ActionResult<List<CommentDto>>> GetCommentOfPost([FromRoute] Guid commentId)
         {
-            var comment = await _unitOfWork.Comments.GetById(commentId);
+            var comment = await _unitOfWork.Comments.GetByIdAsync(commentId);
 
             if (comment == null)
             {
@@ -64,6 +64,8 @@ namespace SocialMediaWebApp.Controllers
 
             comment.Id = Guid.NewGuid();
             comment.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
+            comment.PostId = postId;
+            comment.IsReplyToId = null;
 
             var created = await _unitOfWork.Comments.Add(comment);
 
@@ -73,16 +75,16 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
             return Ok(comment);
         }
 
 
         [HttpPatch("{commentId}/Edit")]
         [Authorize]
-        public async Task<IActionResult> EditComment([FromRoute] Guid commentId, [FromBody] string content)
+        public async Task<IActionResult> EditComment([FromRoute] Guid commentId, [FromBody] CreateCommentDto createCommentDto)
         {
-            var comment = await _unitOfWork.Comments.GetById(commentId);
+            var comment = await _unitOfWork.Comments.GetByIdAsync(commentId);
 
             if (comment == null)
             {
@@ -96,7 +98,7 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest("You are not allowed to edit this comment");
             }
 
-            comment!.Content = content;
+            comment!.Content = createCommentDto.Content;
             var updated = await _unitOfWork.Comments.Update(comment);
 
             if (!updated)
@@ -105,7 +107,7 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
             return Ok(comment);
         }
 
@@ -113,9 +115,9 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> AddReply([FromRoute] Guid commentId, [FromBody] CreateCommentDto createCommentDto)
         {
-            var commentExists = await _unitOfWork.Comments.CommentExists(commentId);
+            var existingComment = await _unitOfWork.Comments.GetByIdAsync(commentId);
 
-            if (!commentExists)
+            if (existingComment is null)
             {
                 ModelState.AddModelError("404", "Comment was not found");
                 return BadRequest(ModelState);
@@ -124,9 +126,13 @@ namespace SocialMediaWebApp.Controllers
             var comment = createCommentDto.MapToComment();
 
             comment.Id = Guid.NewGuid();
+            comment.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
+            comment.PostId = existingComment.PostId;
             comment.IsReply = true;
             comment.IsReplyToId = commentId;
-            comment.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
+            comment.IsEdited = true;
+            comment.EditTime = DateTime.Now;
+            
 
             var created = await _unitOfWork.Comments.Add(comment);
 
@@ -136,8 +142,10 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _unitOfWork.CompleteAsync();
-            return Ok(comment);
+            await _unitOfWork.SaveChangesAsync();
+
+            var commentDto = comment.MapToCommentDto();
+            return Ok(commentDto);
         }
 
 
@@ -146,7 +154,7 @@ namespace SocialMediaWebApp.Controllers
         [Route("{commentId}/Delete")]
         public async Task<IActionResult> DeleteComment([FromRoute] Guid commentId)
         {
-            var comment = await _unitOfWork.Comments.GetCommentById(commentId);
+            var comment = await _unitOfWork.Comments.GetByIdAsync(commentId);
 
             if(comment is null)
             {
@@ -168,7 +176,7 @@ namespace SocialMediaWebApp.Controllers
             }
 
             await _unitOfWork.Comments.Delete(commentId);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return Ok();
         }

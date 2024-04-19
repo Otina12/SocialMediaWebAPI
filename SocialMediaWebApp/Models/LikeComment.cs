@@ -8,8 +8,9 @@ namespace SocialMediaWebApp.Models
     {
         public Guid CommentId { get; set; }
         public string MemberId { get; set; }
-        [ForeignKey("CommentId, PostId, CommunityId")]
+        [ForeignKey("CommentId")]
         public Comment Comment { get; set; }
+        [ForeignKey("MemberId")]
         public Member Member { get; set; }
         public DateTime Time { get; set; }
     }

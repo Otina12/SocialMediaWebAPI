@@ -17,13 +17,11 @@ namespace SocialMediaWebApp.Controllers
     public class PostController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILikeRepository _likeRepository;
         private readonly IHttpContextAccessor _httpContext;
 
-        public PostController(IUnitOfWork unitOfWork, ILikeRepository likeRepository, IHttpContextAccessor httpContext)
+        public PostController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext)
         {
             _unitOfWork = unitOfWork;
-            _likeRepository = likeRepository;
             _httpContext = httpContext;
         }
 
@@ -31,7 +29,7 @@ namespace SocialMediaWebApp.Controllers
         [HttpGet("{postId}")]
         public async Task<IActionResult> GetPostById([FromRoute] Guid postId)
         {
-            var post = await _unitOfWork.Posts.GetById(postId);
+            var post = await _unitOfWork.Posts.GetByIdAsync(postId);
 
             if (post == null)
             {
@@ -72,6 +70,7 @@ namespace SocialMediaWebApp.Controllers
 
             post.Id = Guid.NewGuid();
             post.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
+            post.CommunityId = communityId;
 
             var created = await _unitOfWork.Posts.Add(post);
 
@@ -81,7 +80,7 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return Ok(post);
         }
@@ -92,7 +91,7 @@ namespace SocialMediaWebApp.Controllers
         public async Task<IActionResult> Edit([FromRoute] Guid postId, [FromBody] CreatePostDto postDto)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var post = await _unitOfWork.Posts.GetById(postId);
+            var post = await _unitOfWork.Posts.GetByIdAsync(postId);
 
             if (post is null)
             {
@@ -114,12 +113,11 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return Ok(post);
         }
 
-        
 
         [HttpDelete]
         [Authorize]
@@ -127,7 +125,7 @@ namespace SocialMediaWebApp.Controllers
         public async Task<IActionResult> DeletePost([FromRoute] Guid postId)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var post = await _unitOfWork.Posts.GetById(postId);
+            var post = await _unitOfWork.Posts.GetByIdAsync(postId);
 
             if(post is null)
             {
@@ -146,7 +144,7 @@ namespace SocialMediaWebApp.Controllers
                 await _unitOfWork.Comments.Delete(comment.Id);
             }
 
-            await _likeRepository.RemoveAllLikedOfPost(postId);
+            await _unitOfWork.Likes.RemoveAllLikedOfPost(postId);
 
             var deleted = await _unitOfWork.Posts.Delete(postId);
 
@@ -156,7 +154,7 @@ namespace SocialMediaWebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return Ok();
         }
