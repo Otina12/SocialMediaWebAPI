@@ -52,6 +52,11 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> AddComment([FromRoute] Guid postId, [FromBody] CreateCommentDto createCommentDto)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("Enter valid input");
+            }
+
             var postExists = await _unitOfWork.Posts.PostExists(postId);
 
             if (!postExists)
@@ -99,6 +104,9 @@ namespace SocialMediaWebApp.Controllers
             }
 
             comment!.Content = createCommentDto.Content;
+            comment.IsEdited = true;
+            comment.EditTime = DateTime.Now;
+
             var updated = await _unitOfWork.Comments.Update(comment);
 
             if (!updated)
@@ -130,7 +138,6 @@ namespace SocialMediaWebApp.Controllers
             comment.PostId = existingComment.PostId;
             comment.IsReply = true;
             comment.IsReplyToId = commentId;
-            comment.IsEdited = true;
             comment.EditTime = DateTime.Now;
             
 

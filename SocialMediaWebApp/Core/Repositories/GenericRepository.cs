@@ -36,7 +36,7 @@ namespace SocialMediaWebApp.Core.Repositories
 
         public virtual Task<bool> Update(T entity)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); // specific for each
         }
 
         public async virtual Task<bool> Delete(Guid id)

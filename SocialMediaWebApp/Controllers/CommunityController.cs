@@ -32,6 +32,11 @@ namespace SocialMediaWebApp.Controllers
         {
             var community = await _unitOfWork.Communities.GetByIdAsync(communityId);
 
+            if(community is null)
+            {
+                return NotFound();
+            }
+
             return Ok(community);
         }
 

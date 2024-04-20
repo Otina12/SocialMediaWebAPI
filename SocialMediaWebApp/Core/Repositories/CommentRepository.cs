@@ -46,5 +46,20 @@ namespace SocialMediaWebApp.Core.Repositories
                 .FirstOrDefaultAsync(c => c.Id == commentId);
             return comment != null;
         }
+
+        public async override Task<bool> Update(Comment comment)
+        {
+            var existingComment = await dbSet
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == comment.Id);
+
+            if(existingComment is null)
+            {
+                return false;
+            }
+
+            dbSet.Update(comment);
+            return true;
+        }
     }
 }

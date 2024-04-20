@@ -39,25 +39,25 @@ namespace SocialMediaWebApp.Core.Repositories
             return communities;
         }
 
-        //public async override Task<IEnumerable<Community>> GetAll()
-        //{
-        //    try
-        //    {
-        //        return await dbSet.ToListAsync();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "{Repo} method error", typeof(CommunityRepository));
-        //        return new List<Community>();
-        //    }
-        //}
+        public async override Task<IEnumerable<Community>> GetAllAsync()
+        {
+            try
+            {
+                return await dbSet.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} method error", typeof(CommunityRepository));
+                return new List<Community>();
+            }
+        }
 
-        //public async override Task<Community?> GetById(Guid communityId)
-        //{
-        //    var community = await dbSet
-        //        .FirstOrDefaultAsync(c => c.Id == communityId);
-        //    return community;
-        //}
+        public async override Task<Community?> GetByIdAsync(Guid communityId)
+        {
+            var community = await dbSet
+                .FirstOrDefaultAsync(c => c.Id == communityId);
+            return community;
+        }
 
         public async override Task<bool> Update(Community community)
         {

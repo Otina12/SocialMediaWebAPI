@@ -58,6 +58,11 @@ namespace SocialMediaWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromRoute] Guid communityId, [FromBody] CreatePostDto createPostDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Enter valid input");
+            }
+
             var communityExists = await _unitOfWork.Communities.CommunityExists(communityId);
 
             if (!communityExists)
