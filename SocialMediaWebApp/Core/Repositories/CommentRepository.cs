@@ -53,12 +53,14 @@ namespace SocialMediaWebApp.Core.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == comment.Id);
 
-            if(existingComment is null)
+            if (existingComment is null)
             {
-                return false;
+                return await Add(comment);
             }
 
-            dbSet.Update(comment);
+            existingComment.Content = comment.Content;
+            existingComment.LikeCount = comment.LikeCount;
+            
             return true;
         }
     }

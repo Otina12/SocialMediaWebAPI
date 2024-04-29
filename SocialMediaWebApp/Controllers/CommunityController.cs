@@ -15,15 +15,11 @@ namespace SocialMediaWebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CommunityController : ControllerBase
+    public class CommunityController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _httpContext;
 
-        public CommunityController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext)
+        public CommunityController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext) : base(unitOfWork, httpContext)
         {
-            _unitOfWork = unitOfWork;
-            _httpContext = httpContext;
         }
 
 

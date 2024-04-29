@@ -86,8 +86,6 @@ namespace SocialMediaWebApp.Core.Repositories
                 }
 
                 existingPost.Content = entity.Content;
-                existingPost.IsEdited = true;
-                existingPost.EditTime = DateTime.Now;
                 existingPost.LikeCount = entity.LikeCount;
                 existingPost.CommentCount = entity.CommentCount;
 

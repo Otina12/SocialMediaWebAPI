@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -6,6 +8,8 @@ using SocialMediaWebApp.Core.IConfiguration;
 using SocialMediaWebApp.Core.IRepositories;
 using SocialMediaWebApp.DTOs;
 using SocialMediaWebApp.Extensions;
+using SocialMediaWebApp.Features.Posts.Commands;
+using SocialMediaWebApp.Features.Posts.Queries;
 using SocialMediaWebApp.Mappers;
 using SocialMediaWebApp.Models;
 using System.Net.Http;
@@ -14,113 +18,68 @@ namespace SocialMediaWebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostController : ControllerBase
+    public class PostController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _httpContext;
+        private readonly IMediator _mediator;
 
-        public PostController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext)
+        public PostController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext, IMediator mediator) : base(unitOfWork, httpContext)
         {
-            _unitOfWork = unitOfWork;
-            _httpContext = httpContext;
+            _mediator = mediator;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllPosts()
+        {
+            var result = await _mediator.Send(new GetAllPostsQuery());
+
+            return Ok(result);
         }
 
 
         [HttpGet("{postId}")]
         public async Task<IActionResult> GetPostById([FromRoute] Guid postId)
         {
-            var post = await _unitOfWork.Posts.GetByIdAsync(postId);
+            var result = await _mediator.Send(new GetPostByIdQuery(postId));
 
-            if (post == null)
-            {
-                Log.Error("Post [PostId: {postId}] was not found", postId);
-                return NotFound();
-            }
-
-            var postDto = post.MapToPostDto();
-            Log.Information("Returned post {@post}", post);
-
-            return Ok(postDto);
-        }
-
-
-        [HttpGet("{postId}/Comments")]
-        public async Task<ActionResult<List<CommentDto>>> GetAllCommentsOfPost([FromRoute] Guid postId)
-        {
-            var comments = await _unitOfWork.Comments.GetAllCommentsOfPost(postId);
-            var commentDtos = comments.Select(c => c.MapToCommentDto());
-
-            return Ok(commentDtos);
+            return result is null ? NotFound() : Ok(result);
         }
 
 
         [HttpPost("{communityId}/Create")]
         [Authorize]
-        public async Task<IActionResult> Create([FromRoute] Guid communityId, [FromBody] CreatePostDto createPostDto)
+        public async Task<IActionResult> Create([FromRoute] Guid communityId, [FromBody] CreatePostDto createPostDto, IValidator<CreatePostCommand> val)
         {
-            if (!ModelState.IsValid)
+            var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
+            var command = new CreatePostCommand(communityId, curUserId, createPostDto);
+
+            var validationResult = await val.ValidateAsync(command);
+            if (!validationResult.IsValid)
             {
-                return BadRequest("Enter valid input");
+                return BadRequest(validationResult.Errors.ToDictionary(error => (error.ErrorCode), error => error.ErrorMessage));
             }
 
-            var communityExists = await _unitOfWork.Communities.CommunityExists(communityId);
+            var result = await _mediator.Send(command);
 
-            if (!communityExists)
-            {
-                ModelState.AddModelError("404", "Community was not found");
-                return BadRequest(ModelState);
-            }
-
-            var post = createPostDto.MapToPost();
-
-            post.Id = Guid.NewGuid();
-            post.MemberId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            post.CommunityId = communityId;
-
-            var created = await _unitOfWork.Posts.Add(post);
-
-            if (!created)
-            {
-                ModelState.AddModelError("500", "Something went wrong while adding a comment");
-                return BadRequest(ModelState);
-            }
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return Ok(post);
+            return await GetPostById(result.Id);
         }
 
 
         [HttpPatch("{postId}/Edit")]
         [Authorize]
-        public async Task<IActionResult> Edit([FromRoute] Guid postId, [FromBody] CreatePostDto postDto)
+        public async Task<IActionResult> Edit([FromRoute] Guid postId, [FromBody] CreatePostDto postDto, IValidator<EditPostCommand> val)
         {
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
-            var post = await _unitOfWork.Posts.GetByIdAsync(postId);
+            var command = new EditPostCommand(postId, curUserId, postDto);
 
-            if (post is null)
+            var validationResult = await val.ValidateAsync(command);
+            if (!validationResult.IsValid)
             {
-                ModelState.AddModelError("404", "Post was not found");
-                return BadRequest(ModelState);
+                return BadRequest(validationResult.Errors.ToDictionary(error => (error.ErrorCode), error => error.ErrorMessage));
             }
 
-            if (curUserId != post.MemberId)
-            {
-                return BadRequest("You are not allowed to edit this post");
-            }
+            var result = await _mediator.Send(command);
 
-            post!.Content = postDto.Content;
-            var updated = await _unitOfWork.Posts.Update(post);
-
-            if (!updated)
-            {
-                ModelState.AddModelError("500", "Something went wrong while editing a post");
-                return BadRequest(ModelState);
-            }
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return Ok(post);
+            return Ok(result);
         }
 
 

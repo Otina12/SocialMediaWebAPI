@@ -11,15 +11,11 @@ namespace SocialMediaWebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CommentController : ControllerBase
+    public class CommentController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _httpContext;
 
-        public CommentController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext)
+        public CommentController(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext) : base(unitOfWork, httpContext)
         {
-            _unitOfWork = unitOfWork;
-            _httpContext = httpContext;
         }
 
         [HttpGet("{commentId}")]
@@ -36,6 +32,17 @@ namespace SocialMediaWebApp.Controllers
 
             return Ok(commentDtos);
         }
+
+
+        [HttpGet("{postId}/Comments")]
+        public async Task<ActionResult<List<CommentDto>>> GetAllCommentsOfPost([FromRoute] Guid postId)
+        {
+            var comments = await _unitOfWork.Comments.GetAllCommentsOfPost(postId);
+            var commentDtos = comments.Select(c => c.MapToCommentDto());
+
+            return Ok(commentDtos);
+        }
+
 
 
         [HttpGet("{commentId}/Replies")]

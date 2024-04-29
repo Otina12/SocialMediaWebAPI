@@ -183,6 +183,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SocialMediaWebApp.Controllers.CommentController",
+    "Method": "GetAllCommentsOfPost",
+    "RelativePath": "api/Comment/{postId}/Comments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[SocialMediaWebApp.DTOs.CommentDto, SocialMediaWebApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "SocialMediaWebApp.Controllers.CommunityController",
     "Method": "GetCommunity",
     "RelativePath": "api/Community/{communityId}",
@@ -441,6 +467,16 @@
   },
   {
     "ContainingType": "SocialMediaWebApp.Controllers.PostController",
+    "Method": "GetAllPosts",
+    "RelativePath": "api/Post",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SocialMediaWebApp.Controllers.PostController",
     "Method": "Create",
     "RelativePath": "api/Post/{communityId}/Create",
     "HttpMethod": "POST",
@@ -475,32 +511,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SocialMediaWebApp.Controllers.PostController",
-    "Method": "GetAllCommentsOfPost",
-    "RelativePath": "api/Post/{postId}/Comments",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "postId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[SocialMediaWebApp.DTOs.CommentDto, SocialMediaWebApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "SocialMediaWebApp.Controllers.PostController",

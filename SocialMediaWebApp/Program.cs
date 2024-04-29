@@ -12,6 +12,7 @@ using SocialMediaWebApp.Core.Repositories;
 using SocialMediaWebApp.Data;
 using SocialMediaWebApp.Models;
 using SocialMediaWebApp.Services;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,11 @@ builder.Services.AddAuthentication(options =>
 //    .UseRecommendedSerializerSettings()
 //    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Injecting MediatR
+
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies(typeof(Program).Assembly));
+
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 //builder.Services.AddHangfireServer();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IWelcomeService, WelcomeService>();

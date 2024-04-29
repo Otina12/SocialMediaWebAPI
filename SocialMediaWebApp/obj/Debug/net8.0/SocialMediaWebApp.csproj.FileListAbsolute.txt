@@ -179,3 +179,7 @@ C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Sinks.File.dll
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Sinks.MSSqlServer.dll
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\Serilog.Sinks.PeriodicBatching.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\MediatR.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\MediatR.Contracts.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMediaWebApp\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
