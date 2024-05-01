@@ -1,7 +1,6 @@
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -26,12 +25,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-builder.Services.AddIdentity<Member, IdentityRole>(options =>
-{
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 8;
-})
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
 builder.Services.AddAuthentication(options =>
@@ -108,26 +101,26 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
     ));
 
 
-var app = builder.Build();
+//var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
-//app.UseSerilogRequestLogging();
+////app.UseSerilogRequestLogging();
 
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
-app.MapControllers();
+//app.MapControllers();
 
-//app.UseHangfireDashboard();
-//app.MapHangfireDashboard("/hangfire");
-//RecurringJob.AddOrUpdate(() => Console.WriteLine("Testing if works. [edit] It did :D"), Cron.Minutely);
+////app.UseHangfireDashboard();
+////app.MapHangfireDashboard("/hangfire");
+////RecurringJob.AddOrUpdate(() => Console.WriteLine("Testing if works. [edit] It did :D"), Cron.Minutely);
 
-app.Run();
+//app.Run();

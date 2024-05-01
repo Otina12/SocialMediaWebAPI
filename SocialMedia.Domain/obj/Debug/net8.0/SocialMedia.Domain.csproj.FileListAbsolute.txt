@@ -1,0 +1,13 @@
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\bin\Debug\net8.0\SocialMedia.Domain.deps.json
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\bin\Debug\net8.0\SocialMedia.Domain.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\bin\Debug\net8.0\SocialMedia.Domain.pdb
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\SocialMedia.Domain.csproj.AssemblyReference.cache
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\SocialMedia.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\SocialMedia.Domain.AssemblyInfoInputs.cache
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\SocialMedia.Domain.AssemblyInfo.cs
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\SocialMedia.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\SocialMedia.Domain.sourcelink.json
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\SocialMedia.Domain.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\refint\SocialMedia.Domain.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\SocialMedia.Domain.pdb
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia.Domain\obj\Debug\net8.0\ref\SocialMedia.Domain.dll
