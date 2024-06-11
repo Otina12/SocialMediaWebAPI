@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SocialMedia.Application.Dtos.DtosForGet;
 using SocialMedia.Application.Dtos.DtosForPost;
 using SocialMedia.Application.Helpers.Extensions;
 using SocialMedia.Application.Posts.Commands.CreatePost;
@@ -10,6 +11,7 @@ using SocialMedia.Application.Posts.Commands.EditPost;
 using SocialMedia.Application.Posts.Queries.GetAllPosts;
 using SocialMedia.Application.Posts.Queries.GetPostById;
 using SocialMedia.Domain.Interfaces;
+using SocialMedia.Domain.Shared;
 namespace SocialMedia.Controllers
 {
     [Route("api/[controller]")]
@@ -48,15 +50,14 @@ namespace SocialMedia.Controllers
             var curUserId = _httpContext.HttpContext!.User.GetCurrentUserId();
             var command = new CreatePostCommand(communityId, curUserId, createPostDto);
 
-            var validationResult = await val.ValidateAsync(command);
-            if (!validationResult.IsValid)
+            Result<PostDto> result = await _mediator.Send(command);
+
+            if (result.IsFailure)
             {
-                return BadRequest(validationResult.Errors.ToDictionary(error => (error.ErrorCode), error => error.ErrorMessage));
+                return BadRequest(result.Error);
             }
 
-            var result = await _mediator.Send(command);
-
-            return await GetPostById(result.Id);
+            return Ok(result.Value());
         }
 
         [HttpPatch("{postId}/Edit")]

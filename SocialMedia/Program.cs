@@ -11,6 +11,10 @@ builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
 

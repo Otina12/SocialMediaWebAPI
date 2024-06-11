@@ -160,3 +160,6 @@ C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia\obj\Debug\net8.0\refi
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia\obj\Debug\net8.0\SocialMedia.pdb
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia\obj\Debug\net8.0\SocialMedia.genruntimeconfig.cache
 C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia\obj\Debug\net8.0\ref\SocialMedia.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\Giorgi\source\repos\SocialMediaWebApp\SocialMedia\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll

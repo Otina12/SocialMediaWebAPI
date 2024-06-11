@@ -64,9 +64,9 @@ namespace SocialMedia.Controllers
                 return BadRequest("Enter valid input");
             }
 
-            var postExists = await _unitOfWork.Posts.PostExists(postId);
+            var post = await _unitOfWork.Posts.GetByIdAsync(postId);
 
-            if (!postExists)
+            if (post is null)
             {
                 ModelState.AddModelError("404", "Post or community was not found");
                 return BadRequest(ModelState);
@@ -87,6 +87,7 @@ namespace SocialMedia.Controllers
                 return BadRequest(ModelState);
             }
 
+            post.CommentCount += 1;
             await _unitOfWork.SaveChangesAsync();
             return Ok(comment);
         }

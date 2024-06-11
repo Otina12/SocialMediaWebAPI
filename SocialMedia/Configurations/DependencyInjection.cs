@@ -1,11 +1,13 @@
 ﻿using AutoMapper.Execution;
 using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialMedia.Application.Abstractions;
+using SocialMedia.Application.Behaviors;
 using SocialMedia.Domain.Entites;
 using SocialMedia.Domain.Interfaces;
 using SocialMedia.Infrastructure.Services;
@@ -34,8 +36,10 @@ public static class DependencyInjection
     public static void AddApplication(this IServiceCollection services)
     {
         var assembly = Application.AssemblyReference.Assembly;
+
         services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
-        services.AddValidatorsFromAssembly(assembly);
+        services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);
+        //services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipeline<,>));
     }
 
     public static void ConfigureIdentity(this IServiceCollection services)

@@ -30,9 +30,12 @@ namespace SocialMedia.Persistence.Repositories
 
         public async Task<List<Post>> GetAllPostsOfCommunity(Guid communityId, QueryObject query)
         {
-            var community = await _context.Communities.Include(c => c.Posts).FirstOrDefaultAsync(x => x.Id ==  communityId);
+            var community = await _context.Communities.Include(c => c.Posts).AsNoTracking().FirstOrDefaultAsync(x => x.Id ==  communityId);
 
-            if(community is null)
+            //var entry = _context.Entry(community);
+            //await Console.Out.WriteLineAsync($"State of community object: {entry.State}");
+
+            if (community is null)
             {
                 throw new CommunityNotFoundException($"Community with Id = {communityId} was not found");
             }

@@ -19,7 +19,7 @@ namespace SocialMedia.Persistence.Configurations
             builder.HasOne(p => p.Community)
                 .WithMany(c => c.Posts)
                 .HasForeignKey(p => p.CommunityId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

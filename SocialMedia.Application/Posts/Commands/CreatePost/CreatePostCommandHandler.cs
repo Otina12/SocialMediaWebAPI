@@ -7,7 +7,7 @@ using SocialMedia.Domain.Shared;
 
 namespace SocialMedia.Application.Posts.Commands.CreatePost
 {
-    public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, PostDto>
+    public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Result<PostDto>>
     {
         protected readonly IUnitOfWork _unitOfWork;
 
@@ -16,32 +16,32 @@ namespace SocialMedia.Application.Posts.Commands.CreatePost
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<PostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
-        {
-            var post = request.PostDto.MapToPost();
-
-            post.Id = Guid.NewGuid();
-            post.MemberId = request.UserId;
-            post.CommunityId = request.CommunityId;
-
-            await _unitOfWork.Posts.Add(post);
-            await _unitOfWork.SaveChangesAsync();
-
-            return post.MapToPostDto();
-        }
-
-        //public async Task<Result<PostDto>> Handle(CreatePostCommand command, CancellationToken cancellationToken)
+        //public async Task<PostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
         //{
-        //    var post = command.PostDto.MapToPost();
+        //    var post = request.PostDto.MapToPost();
 
         //    post.Id = Guid.NewGuid();
-        //    post.MemberId = command.UserId;
-        //    post.CommunityId = command.CommunityId;
+        //    post.MemberId = request.UserId;
+        //    post.CommunityId = request.CommunityId;
 
         //    await _unitOfWork.Posts.Add(post);
         //    await _unitOfWork.SaveChangesAsync();
 
         //    return post.MapToPostDto();
         //}
+
+        public async Task<Result<PostDto>> Handle(CreatePostCommand command, CancellationToken cancellationToken)
+        {
+            var post = command.PostDto.MapToPost();
+
+            post.Id = Guid.NewGuid();
+            post.MemberId = command.UserId;
+            post.CommunityId = command.CommunityId;
+
+            await _unitOfWork.Posts.Add(post);
+            await _unitOfWork.SaveChangesAsync();
+
+            return post.MapToPostDto();
+        }
     }
 }
